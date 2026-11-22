@@ -6,6 +6,10 @@ Plan meals around what's in your kitchen, then order only what's missing from Ca
   facts from careem-mcp, and calls the Careem tools in a fixed order. Mutating tools only run from
   explicit button presses; checkout also needs `confirmed: true` and is never retried.
 - `web/`: Vite + React + TypeScript, styled from the design tokens in `web/src/styles/tokens.css`.
+  On a desktop browser the app runs inside a phone frame, starting on a Careem-style home screen
+  where only the **Meal prep** card is clickable; on a real phone it fills the screen. After the
+  10-question onboarding, an animated checklist shows the real checks (portions, allergies,
+  dislikes, kitchen, deals, budget) while the plan is built.
 
 ## Claude
 

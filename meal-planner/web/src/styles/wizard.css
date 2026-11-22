@@ -2,7 +2,7 @@
 
 /* ===================== wizard shell ===================== */
 .main-wizard { max-width: 760px; padding-bottom: 0; gap: 0; }
-.wizard { display: flex; flex-direction: column; min-height: calc(100dvh - 72px); }
+.wizard { display: flex; flex-direction: column; min-height: calc(100cqh - 72px); }
 .wizard-top {
   position: sticky; top: 69px; z-index: 15; display: flex; align-items: center; gap: var(--space-3);
   padding: var(--space-3) 0; background: linear-gradient(var(--bg-base) 75%, transparent);
@@ -13,7 +13,7 @@
 .wizard-body { flex: 1; padding: var(--space-3) 0 var(--space-6); overflow-x: clip; }
 .wizard-step { display: flex; flex-direction: column; gap: var(--space-4); }
 .step-head { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-2); }
-.step-head h1 { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.375rem); }
+.step-head h1 { font-size: clamp(1.75rem, 1.3rem + 1.6cqi, 2.375rem); }
 .step-head h1:focus-visible { outline: none; }
 .wizard-cta {
   position: sticky; bottom: 0; z-index: 15; display: flex; flex-direction: column; gap: var(--space-2);
@@ -156,7 +156,7 @@
 .budget-amount-row { display: flex; align-items: baseline; gap: var(--space-2); }
 .currency { font-family: var(--font-display); font-weight: 700; color: var(--text-secondary); font-size: 1.25rem; }
 .budget-input {
-  width: 6ch; font-size: clamp(2.5rem, 2rem + 2vw, 3.25rem); font-weight: 600; color: var(--text-primary); background: transparent;
+  width: 6ch; font-size: clamp(2.5rem, 2rem + 2cqi, 3.25rem); font-weight: 600; color: var(--text-primary); background: transparent;
   border: 0; border-bottom: 2px solid var(--border-strong); padding: 0; -moz-appearance: textfield; appearance: textfield;
 }
 .budget-input::-webkit-outer-spin-button, .budget-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -222,7 +222,9 @@
 .ingredients { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .ingredients li { display: flex; flex-direction: column; gap: 2px; padding: var(--space-3) 0; border-top: 1px solid var(--border-subtle); }
 .ing-amount { font-weight: 600; }
-.ing-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; }
+.ing-tag { display: flex; align-items: flex-start; gap: 6px; font-size: 0.875rem; }
+.ing-tag svg { flex: none; margin-top: 3px; }
+.ing-tag .num, .need-price, .cart-price .num, .deal-prices .num { white-space: nowrap; }
 .ing-tag.have { color: var(--brand-text); font-weight: 600; }
 .ing-tag.buy { color: var(--text-secondary); }
 .ing-tag.buy svg { color: var(--brand-text); }
@@ -241,17 +243,17 @@
 .timer.finished .num { color: var(--brand-text); font-weight: 700; }
 .timer-long { margin-left: 42px; }
 
-@media (max-width: 1024px) {
+@container screen (max-width: 1024px) {
   .plan-layout { grid-template-columns: 1fr; }
 }
-@media (max-width: 640px) {
+@container screen (max-width: 640px) {
   .kitchen-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-5) var(--space-2); }
   .appliance { min-height: 112px; }
   .day-pill { min-height: 84px; }
   .tile-grid { gap: var(--space-2); }
   .tile-emoji { font-size: 1.6rem; }
   .tile-label { font-size: 0.75rem; }
-  .drawer { top: auto; height: 92dvh; width: 100%; border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; border-right: 1px solid var(--glass-border); }
+  .drawer { top: auto; height: 92cqh; width: 100%; border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; border-right: 1px solid var(--glass-border); }
   .wizard-top { top: 61px; }
   .grid-card { min-height: 100px; padding: var(--space-3); }
   .corner-check { top: 10px; right: 10px; }

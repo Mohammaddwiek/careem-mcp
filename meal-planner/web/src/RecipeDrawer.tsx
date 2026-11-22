@@ -43,6 +43,14 @@ export function RecipeDrawer({ recipe, plan, swapBusy, onClose, onSwap }: Props)
     setDone([])
   }
 
+  // remember what opened the drawer and give focus back to it on close
+  const openId = recipe?.id ?? null
+  useEffect(() => {
+    if (!openId) return
+    const opener = document.activeElement as HTMLElement | null
+    return () => { opener?.focus?.({ preventScroll: true }) }
+  }, [openId])
+
   useEffect(() => {
     if (!recipe) return
     requestAnimationFrame(() => heading.current?.focus())
@@ -123,7 +131,8 @@ export function RecipeDrawer({ recipe, plan, swapBusy, onClose, onSwap }: Props)
                         ) : unavailable ? (
                           <span className="ing-tag bad"><TriangleAlert size={14} aria-hidden="true" /> Not on Careem Quik right now</span>
                         ) : n ? (
-                          <span className="ing-tag buy"><ShoppingBasket size={14} aria-hidden="true" /> Buy on Careem Quik: {n.product.name}, <span className="num">{aed(n.product.price)}</span></span>
+                          <span className="ing-tag buy"><ShoppingBasket size={14} aria-hidden="true" />
+                            <span>Buy on Careem Quik: {n.product.name}, <span className="num">{aed(n.product.price)}</span></span></span>
                         ) : null}
                       </li>
                     )

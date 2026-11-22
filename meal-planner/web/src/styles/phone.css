@@ -1,0 +1,181 @@
+/* Phone frame, the Careem home recreation and the plan loader. */
+
+/* ===================== phone frame ===================== */
+body { overflow: hidden; }
+.stage {
+  min-height: 100dvh; display: grid; place-items: center; padding: 24px;
+  background:
+    radial-gradient(900px 600px at 50% 0%, var(--brand-tint), transparent 70%),
+    var(--bg-base);
+}
+.phone {
+  position: relative; width: 402px; height: min(874px, calc(100dvh - 48px)); padding: 11px; border-radius: 62px;
+  background: linear-gradient(150deg, #2b3631, #0b100e 45%, #1c2420);
+  box-shadow: 0 0 0 1px #3d4a44, inset 0 0 0 2px #050807, 0 40px 90px rgba(0, 0, 0, 0.55), var(--glow);
+}
+.phone::before, .phone::after { /* side buttons */
+  content: ''; position: absolute; width: 4px; border-radius: 2px; background: #2b3631;
+}
+.phone::before { left: -4px; top: 170px; height: 64px; box-shadow: 0 84px 0 #2b3631; }
+.phone::after { right: -4px; top: 220px; height: 96px; }
+.phone-inner {
+  position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden;
+  border-radius: 52px; background: var(--bg-base);
+  transform: translateZ(0); /* fixed layers (sheets, drawers, overlays) anchor to the phone, not the window */
+}
+.status-bar {
+  position: relative; z-index: 5; flex: none; height: 52px; display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 34px 0 42px; font: 600 16px/1 var(--font-body); font-variant-numeric: tabular-nums;
+}
+.status-careem { background: #1d5444; color: #FFFFFF; }
+.status-app { background: var(--bg-base); color: var(--text-primary); }
+.island { position: absolute; left: 50%; top: 11px; translate: -50% 0; width: 122px; height: 35px; border-radius: 20px; background: #000; }
+.status-icons { display: inline-flex; align-items: center; gap: 6px; }
+.status-icons svg { fill: currentColor; }
+.status-net { font-size: 14px; }
+.battery { position: relative; width: 26px; height: 13px; border-radius: 4px; border: 1.5px solid currentColor; opacity: 0.9; }
+.battery::after { content: ''; position: absolute; right: -4px; top: 3.5px; width: 2px; height: 4px; border-radius: 0 1px 1px 0; background: currentColor; }
+.battery-fill { position: absolute; inset: 1.5px; right: 35%; border-radius: 2px; background: currentColor; }
+.phone-screen {
+  position: relative; flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+  container: screen / size;
+  scrollbar-width: none;
+}
+.phone-screen::-webkit-scrollbar { display: none; }
+.home-indicator {
+  position: absolute; z-index: 70; left: 50%; bottom: 8px; translate: -50% 0; width: 134px; height: 5px; border-radius: 3px;
+  background: var(--text-primary); opacity: 0.85; pointer-events: none;
+}
+
+/* on a real phone (or a narrow window) the app simply fills the screen */
+@media (max-width: 520px), (max-height: 560px) {
+  .stage { display: block; padding: 0; }
+  .phone { width: 100%; height: 100dvh; padding: 0; border-radius: 0; box-shadow: none; background: none; }
+  .phone::before, .phone::after, .status-bar, .home-indicator { display: none; }
+  .phone-inner { border-radius: 0; }
+  .ch-header { padding-top: max(10px, env(safe-area-inset-top)); }
+  .phone-screen .topbar { padding-top: max(var(--space-2), env(safe-area-inset-top)); }
+}
+
+/* the app inside the phone: a little less space at the very bottom for the home indicator */
+.phone-screen .topbar { padding-top: var(--space-2); }
+
+/* ===================== Careem home (light Careem look in both themes) ===================== */
+.careem-home {
+  --c-green: #1d5444; --c-green-deep: #10372c; --c-ink: #0D1B14; --c-muted: #465B50; --c-tile: #F1F4F2; --c-line: #D9E3DD;
+  min-height: 100%; display: flex; flex-direction: column; background: var(--c-green); color: var(--c-ink);
+}
+.ch-header { padding: 6px 18px 30px; background: var(--c-green); }
+.ch-search {
+  display: flex; align-items: center; justify-content: space-between; height: 54px; padding: 0 18px 0 20px; border-radius: 14px;
+  background: #C9D9D1; color: var(--c-ink); font-size: 1.1875rem;
+}
+.ch-sheet {
+  flex: 1; margin-top: -14px; padding: 22px 16px 120px; border-radius: 28px 28px 0 0; background: #FFFFFF;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.ch-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.ch-tile {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px;
+  aspect-ratio: 0.72; padding: 10px 4px 12px; border-radius: 14px; background: var(--c-tile); cursor: default; user-select: none;
+}
+.ch-art { font-size: 2.35rem; line-height: 1; filter: drop-shadow(0 6px 6px rgba(13, 27, 20, 0.18)); margin-bottom: auto; margin-top: 14px; }
+.ch-label { font-weight: 600; font-size: 0.875rem; color: var(--c-ink); }
+.ch-badge {
+  position: absolute; top: -8px; left: 50%; translate: -50% 0; padding: 2px 9px; border-radius: 7px;
+  background: #10372c; color: #7DF2B4; font-size: 0.8125rem; font-weight: 700;
+}
+.ch-mealprep {
+  position: relative; display: flex; align-items: center; gap: 14px; width: 100%; min-height: 84px; padding: 14px 14px 14px 12px;
+  border-radius: 18px; border: 2px solid #00A85A; text-align: left; cursor: pointer; color: var(--c-ink);
+  background: linear-gradient(120deg, #E3FBEE, #FFFFFF 70%);
+  box-shadow: 0 10px 24px rgba(0, 135, 68, 0.18);
+  transition: transform 160ms var(--ease-out), box-shadow 200ms var(--ease-out);
+  animation: mp-pulse 2.6s ease-in-out infinite;
+}
+.ch-mealprep:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0, 135, 68, 0.26); }
+.ch-mealprep:active { transform: scale(0.98); }
+.ch-mealprep:focus-visible { outline: 3px solid #026AA2; outline-offset: 3px; }
+@keyframes mp-pulse { 0%, 100% { box-shadow: 0 10px 24px rgba(0, 135, 68, 0.18); } 50% { box-shadow: 0 10px 30px rgba(0, 135, 68, 0.34), 0 0 0 4px rgba(0, 168, 90, 0.12); } }
+.ch-mp-art { display: grid; place-items: center; width: 58px; height: 58px; flex: none; border-radius: 16px; background: #CFF5E0; font-size: 2rem; }
+.ch-mp-text { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.ch-mp-title { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 800; font-size: 1.1875rem; }
+.ch-new { padding: 1px 8px; border-radius: 6px; background: #008744; color: #FFFFFF; font-family: var(--font-body); font-size: 0.75rem; font-weight: 700; }
+.ch-mp-sub { color: var(--c-muted); font-size: 0.875rem; line-height: 1.35; }
+.ch-mp-go { color: #007038; flex: none; }
+.ch-cards { display: flex; gap: 10px; overflow-x: auto; margin: 0 -16px; padding: 0 16px; scrollbar-width: none; }
+.ch-cards::-webkit-scrollbar { display: none; }
+.ch-card {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 14px; min-width: 150px; height: 64px; padding: 0 14px;
+  border-radius: 12px; border: 1.5px solid var(--c-line); background: #FFFFFF; cursor: default;
+}
+.ch-card > span:first-child { display: flex; flex-direction: column; }
+.ch-card-k { color: var(--c-muted); font-size: 0.8125rem; }
+.ch-card-v { font-weight: 700; font-size: 0.9375rem; color: var(--c-ink); white-space: nowrap; }
+.ch-card-art { font-size: 1.6rem; margin-left: auto; }
+.ch-promo {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 30px -16px 0; padding: 70px 22px 26px;
+  background: var(--c-green-deep); color: #FFFFFF; text-align: center;
+}
+.ch-gift { position: absolute; top: -34px; font-size: 4.5rem; filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.3)); }
+.ch-promo-tag { position: absolute; top: 34px; padding: 3px 14px; border-radius: 6px; background: #3DDC84; color: #072A1C; font-weight: 800; font-style: italic; }
+.ch-promo-tag small { display: block; font-size: 0.75rem; font-style: normal; text-align: center; }
+.ch-promo-title { margin-top: 18px; font-family: var(--font-display); font-weight: 800; font-size: 1.75rem; color: #FFFFFF; }
+.ch-promo-sub { color: #E4EFE9; }
+.ch-promo-btn {
+  margin-top: 16px; width: 100%; padding: 15px; border-radius: 10px; background: #FFFFFF; color: var(--c-ink);
+  font-weight: 700; font-size: 1rem; cursor: default;
+}
+.ch-tabbar {
+  position: sticky; bottom: 0; margin-top: auto; display: grid; grid-template-columns: repeat(4, 1fr); padding: 10px 6px 26px;
+  background: var(--c-green-deep); border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ch-tab { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #B8CCC3; font-size: 0.8125rem; font-weight: 600; cursor: default; }
+.ch-tab.on { color: #FFFFFF; }
+
+/* ===================== plan loader ===================== */
+.loader {
+  min-height: calc(100cqh - 72px); display: flex; flex-direction: column; align-items: center; gap: var(--space-4);
+  padding: var(--space-7) var(--space-5) var(--space-6); max-width: 520px; margin: 0 auto; text-align: center;
+}
+.loader h1 { font-size: 1.625rem; }
+.loader-orb { position: relative; width: 112px; height: 112px; display: grid; place-items: center; margin-bottom: var(--space-2); }
+.orb-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--brand-primary), var(--ai-accent), transparent 70%, var(--brand-primary));
+  mask: radial-gradient(circle, transparent 47px, #000 48px); -webkit-mask: radial-gradient(circle, transparent 47px, #000 48px);
+  animation: spin 1.4s linear infinite;
+}
+.orb-core {
+  display: grid; place-items: center; width: 78px; height: 78px; border-radius: 50%; color: var(--brand-on-primary);
+  background: var(--brand-primary); box-shadow: var(--glow); animation: orb-breathe 2s ease-in-out infinite;
+}
+@keyframes orb-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+.loader-bar { width: 100%; height: 8px; border-radius: 8px; background: var(--bg-elevated); border: 1px solid var(--border-subtle); overflow: hidden; }
+.loader-bar span { display: block; height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--brand-primary), var(--ai-accent)); }
+.loader-steps { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: var(--space-2); text-align: left; }
+.lstep {
+  display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-input); border: 1px solid var(--border-subtle); background: var(--bg-surface);
+}
+.lstep.active { border-color: var(--glass-border); box-shadow: var(--glow); }
+.lstep.done { border-color: var(--glass-border); }
+.lstep-icon { display: grid; place-items: center; width: 28px; height: 28px; flex: none; }
+.lcheck { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--brand-primary); color: var(--brand-on-primary); }
+.lspin { width: 22px; height: 22px; border-radius: 50%; border: 3px solid var(--bg-elevated); border-top-color: var(--brand-primary); animation: spin 0.8s linear infinite; }
+.ldot { width: 10px; height: 10px; border-radius: 50%; background: var(--border-strong); }
+.lstep-text { display: flex; flex-direction: column; min-width: 0; }
+.lstep-title { font-weight: 600; color: var(--text-primary); }
+.lstep-detail { font-size: 0.875rem; color: var(--text-secondary); }
+.loader-error {
+  display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); width: 100%; padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-input); background: var(--allergen-bg); color: var(--allergen-text); text-align: left;
+}
+.loader-error span { flex: 1; color: var(--text-primary); }
+
+/* back to Careem from the app's top bar */
+.back-home { flex: none; }
+
+/* render failure */
+.crash { min-height: 100cqh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); padding: var(--space-6); text-align: center; color: var(--allergen-text); }
+.crash h1 { font-size: 1.5rem; }

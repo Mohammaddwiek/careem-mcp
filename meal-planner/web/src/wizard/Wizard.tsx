@@ -2,6 +2,7 @@ import { ChevronLeft } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { Address, Product } from '../api'
+import { scrollScreenTop } from '../helpers'
 import type { Answers } from './answers'
 import { STEPS, blocker } from './registry'
 
@@ -33,7 +34,7 @@ export function Wizard({ answers, setAnswers, step, setStep, address, aiAvailabl
   useEffect(() => {
     // move focus to the new step's heading so screen readers announce it
     const t = setTimeout(() => body.current?.querySelector<HTMLElement>('[data-step-title]')?.focus({ preventScroll: true }), 50)
-    window.scrollTo({ top: 0 })
+    scrollScreenTop()
     return () => clearTimeout(t)
   }, [step])
 

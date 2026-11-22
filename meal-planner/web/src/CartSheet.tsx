@@ -45,7 +45,11 @@ export function CartSheet({ open, cart, address, budget, dev, busyLine, placing,
     setSeen({ open, error, payment: pt })
   }
   useEffect(() => {
-    if (open) requestAnimationFrame(() => heading.current?.focus())
+    if (!open) return
+    const opener = document.activeElement as HTMLElement | null
+    requestAnimationFrame(() => heading.current?.focus())
+    // give focus back to whatever opened the sheet (the cart button, usually)
+    return () => { if (opener?.isConnected) opener.focus({ preventScroll: true }) }
   }, [open])
   // Escape closes the sheet even when focus has left it (e.g. a re-rendered button)
   useEffect(() => {

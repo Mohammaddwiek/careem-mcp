@@ -301,3 +301,33 @@ def test_review_degraded_scenarios_stay_canned(live_client):
     r2 = live_client("cart_get_quik_basket", {**HOME, "timezone": "Asia/Dubai pricing-down"})
     assert r2 == r and canned_counts is not None  # canned answer, unaffected by the live basket
     assert live_client("search_groceries_get_all_deals", {"latitude": 1, "longitude": 55.1})["groups"] in (None, [])
+
+
+def test_save_survives_a_briefly_locked_file(tmp_path, catalog, monkeypatch):
+    """OneDrive and antivirus briefly lock files on Windows; os.replace then raises PermissionError."""
+    calls = {"n": 0}
+    real_replace = live.os.replace
+
+    def flaky(src, dst):
+        calls["n"] += 1
+        if calls["n"] <= 2:
+            raise PermissionError(5, "Access is denied")
+        return real_replace(src, dst)
+
+    monkeypatch.setattr(live.os, "replace", flaky)
+    b = live.Basket(tmp_path / "cart.json")
+    b.add(catalog[4000143], 1)
+    assert calls["n"] >= 3
+    assert any(l["catalog_item_id"] == "4000143" for l in live.Basket(tmp_path / "cart.json").lines)
+
+
+def test_save_falls_back_when_the_file_stays_locked(tmp_path, catalog, monkeypatch):
+    def locked(src, dst):
+        raise PermissionError(5, "Access is denied")
+
+    monkeypatch.setattr(live.os, "replace", locked)
+    monkeypatch.setattr(live.time, "sleep", lambda s: None)
+    b = live.Basket(tmp_path / "cart.json")
+    b.add(catalog[4000143], 1)
+    assert any(l["catalog_item_id"] == "4000143" for l in live.Basket(tmp_path / "cart.json").lines)
+    assert not (tmp_path / "cart.json.tmp").exists()
