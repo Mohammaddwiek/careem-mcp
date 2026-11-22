@@ -1,0 +1,3095 @@
+{
+ "merchant_id": 40001,
+ "currency": "AED",
+ "products": [
+  {
+   "id": 4000101,
+   "name": "Fresh Farm Full Cream Milk 1L",
+   "unit": "1 L",
+   "pack": {
+    "amount": 1000,
+    "unit": "ml"
+   },
+   "price": 6.75,
+   "original_price": null,
+   "category": {
+    "id": 7101,
+    "name": "Milk",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "milk",
+    "whole milk",
+    "full cream milk"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 64,
+    "protein_g": 3.2,
+    "carbs_g": 4.7,
+    "fat_g": 3.6
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_milk_1l"
+  },
+  {
+   "id": 4000102,
+   "name": "Free Range Eggs 12pk",
+   "unit": "12 pcs",
+   "pack": {
+    "amount": 12,
+    "unit": "pcs"
+   },
+   "price": 14.5,
+   "original_price": null,
+   "category": {
+    "id": 7102,
+    "name": "Eggs",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "egg",
+    "eggs",
+    "free range eggs"
+   ],
+   "allergens": [
+    "egg"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 143,
+    "protein_g": 12.6,
+    "carbs_g": 0.7,
+    "fat_g": 9.5
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": true,
+   "master_product_id": "sku_eggs_12"
+  },
+  {
+   "id": 4000103,
+   "name": "Sourdough Loaf",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 12.0,
+   "original_price": null,
+   "category": {
+    "id": 7201,
+    "name": "Bread",
+    "parent_id": 7200,
+    "parent_name": "Bakery"
+   },
+   "keywords": [
+    "bread",
+    "sourdough",
+    "loaf",
+    "toast"
+   ],
+   "allergens": [
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 250,
+    "protein_g": 9.0,
+    "carbs_g": 48.0,
+    "fat_g": 1.5
+   },
+   "available": true,
+   "stock": 15,
+   "recommended": false,
+   "master_product_id": "sku_bread"
+  },
+  {
+   "id": 4000104,
+   "name": "Bananas 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 7.25,
+   "original_price": null,
+   "category": {
+    "id": 7301,
+    "name": "Fruits",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "banana",
+    "bananas"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 89,
+    "protein_g": 1.1,
+    "carbs_g": 23.0,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_bananas"
+  },
+  {
+   "id": 4000105,
+   "name": "Mineral Water 6x1.5L",
+   "unit": "6 x 1.5 L",
+   "pack": {
+    "amount": 9000,
+    "unit": "ml"
+   },
+   "price": 9.95,
+   "original_price": null,
+   "category": {
+    "id": 7801,
+    "name": "Water",
+    "parent_id": 7800,
+    "parent_name": "Beverages"
+   },
+   "keywords": [
+    "water",
+    "mineral water"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 0,
+    "protein_g": 0.0,
+    "carbs_g": 0.0,
+    "fat_g": 0.0
+   },
+   "available": true,
+   "stock": 50,
+   "recommended": false,
+   "master_product_id": "sku_water_6"
+  },
+  {
+   "id": 4000106,
+   "name": "Hass Avocado 2pk",
+   "unit": "2 pcs",
+   "pack": {
+    "amount": 2,
+    "unit": "pcs"
+   },
+   "price": 11.5,
+   "original_price": null,
+   "category": {
+    "id": 7301,
+    "name": "Fruits",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "avocado"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 160,
+    "protein_g": 2.0,
+    "carbs_g": 9.0,
+    "fat_g": 15.0
+   },
+   "available": false,
+   "stock": 0,
+   "recommended": false,
+   "master_product_id": "sku_avocado"
+  },
+  {
+   "id": 4000107,
+   "name": "Greek Yogurt 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 13.25,
+   "original_price": null,
+   "category": {
+    "id": 7103,
+    "name": "Yogurt & Labneh",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "yogurt",
+    "greek yogurt",
+    "yoghurt"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 97,
+    "protein_g": 9.0,
+    "carbs_g": 3.9,
+    "fat_g": 5.0
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": true,
+   "master_product_id": "sku_yogurt"
+  },
+  {
+   "id": 4000108,
+   "name": "Ground Coffee 250g",
+   "unit": "250 g",
+   "pack": {
+    "amount": 250,
+    "unit": "g"
+   },
+   "price": 32.0,
+   "original_price": 40.0,
+   "category": {
+    "id": 7501,
+    "name": "Coffee",
+    "parent_id": 7500,
+    "parent_name": "Coffee & Tea"
+   },
+   "keywords": [
+    "coffee",
+    "ground coffee"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 2,
+    "protein_g": 0.1,
+    "carbs_g": 0.0,
+    "fat_g": 0.0
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_coffee"
+  },
+  {
+   "id": 4000109,
+   "name": "Ground Coffee 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 72.0,
+   "original_price": null,
+   "category": {
+    "id": 7501,
+    "name": "Coffee",
+    "parent_id": 7500,
+    "parent_name": "Coffee & Tea"
+   },
+   "keywords": [
+    "coffee",
+    "ground coffee"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 2,
+    "protein_g": 0.1,
+    "carbs_g": 0.0,
+    "fat_g": 0.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_coffee_500"
+  },
+  {
+   "id": 4000110,
+   "name": "Low Fat Milk 1L",
+   "unit": "1 L",
+   "pack": {
+    "amount": 1000,
+    "unit": "ml"
+   },
+   "price": 6.25,
+   "original_price": null,
+   "category": {
+    "id": 7101,
+    "name": "Milk",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "milk",
+    "low fat milk",
+    "skimmed milk"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 46,
+    "protein_g": 3.4,
+    "carbs_g": 4.9,
+    "fat_g": 1.5
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_low_fat_milk_1l"
+  },
+  {
+   "id": 4000111,
+   "name": "Labneh 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 11.5,
+   "original_price": null,
+   "category": {
+    "id": 7103,
+    "name": "Yogurt & Labneh",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "labneh",
+    "labna",
+    "cream cheese"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 160,
+    "protein_g": 6.0,
+    "carbs_g": 4.0,
+    "fat_g": 13.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_labneh_400g"
+  },
+  {
+   "id": 4000112,
+   "name": "Cheddar Cheese Block 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 21.0,
+   "original_price": null,
+   "category": {
+    "id": 7104,
+    "name": "Cheese",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "cheese",
+    "cheddar",
+    "cheddar cheese"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 403,
+    "protein_g": 25.0,
+    "carbs_g": 1.3,
+    "fat_g": 33.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_cheddar_cheese_block_400g"
+  },
+  {
+   "id": 4000113,
+   "name": "Mozzarella 200g",
+   "unit": "200 g",
+   "pack": {
+    "amount": 200,
+    "unit": "g"
+   },
+   "price": 12.75,
+   "original_price": null,
+   "category": {
+    "id": 7104,
+    "name": "Cheese",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "mozzarella",
+    "cheese"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 280,
+    "protein_g": 22.0,
+    "carbs_g": 2.2,
+    "fat_g": 20.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_mozzarella_200g"
+  },
+  {
+   "id": 4000114,
+   "name": "Halloumi 250g",
+   "unit": "250 g",
+   "pack": {
+    "amount": 250,
+    "unit": "g"
+   },
+   "price": 16.5,
+   "original_price": 19.5,
+   "category": {
+    "id": 7104,
+    "name": "Cheese",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "halloumi",
+    "cheese",
+    "grilling cheese"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 321,
+    "protein_g": 21.0,
+    "carbs_g": 2.2,
+    "fat_g": 25.0
+   },
+   "available": true,
+   "stock": 15,
+   "recommended": false,
+   "master_product_id": "sku_halloumi_250g"
+  },
+  {
+   "id": 4000115,
+   "name": "Feta Cheese 200g",
+   "unit": "200 g",
+   "pack": {
+    "amount": 200,
+    "unit": "g"
+   },
+   "price": 10.25,
+   "original_price": null,
+   "category": {
+    "id": 7104,
+    "name": "Cheese",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "feta",
+    "cheese",
+    "feta cheese"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 264,
+    "protein_g": 14.0,
+    "carbs_g": 4.0,
+    "fat_g": 21.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_feta_cheese_200g"
+  },
+  {
+   "id": 4000116,
+   "name": "Grated Parmesan 100g",
+   "unit": "100 g",
+   "pack": {
+    "amount": 100,
+    "unit": "g"
+   },
+   "price": 14.0,
+   "original_price": null,
+   "category": {
+    "id": 7104,
+    "name": "Cheese",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "parmesan",
+    "cheese",
+    "grated cheese"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 431,
+    "protein_g": 38.0,
+    "carbs_g": 4.0,
+    "fat_g": 29.0
+   },
+   "available": true,
+   "stock": 15,
+   "recommended": false,
+   "master_product_id": "sku_grated_parmesan_100g"
+  },
+  {
+   "id": 4000117,
+   "name": "Unsalted Butter 200g",
+   "unit": "200 g",
+   "pack": {
+    "amount": 200,
+    "unit": "g"
+   },
+   "price": 12.5,
+   "original_price": null,
+   "category": {
+    "id": 7105,
+    "name": "Butter & Cream",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "butter"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 717,
+    "protein_g": 0.9,
+    "carbs_g": 0.1,
+    "fat_g": 81.0
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_unsalted_butter_200g"
+  },
+  {
+   "id": 4000118,
+   "name": "Cooking Cream 250ml",
+   "unit": "250 ml",
+   "pack": {
+    "amount": 250,
+    "unit": "ml"
+   },
+   "price": 7.75,
+   "original_price": null,
+   "category": {
+    "id": 7105,
+    "name": "Butter & Cream",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "cream",
+    "cooking cream",
+    "heavy cream"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 300,
+    "protein_g": 2.1,
+    "carbs_g": 3.3,
+    "fat_g": 31.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_cooking_cream_250ml"
+  },
+  {
+   "id": 4000119,
+   "name": "Wholemeal Bread 600g",
+   "unit": "600 g",
+   "pack": {
+    "amount": 600,
+    "unit": "g"
+   },
+   "price": 8.5,
+   "original_price": null,
+   "category": {
+    "id": 7201,
+    "name": "Bread",
+    "parent_id": 7200,
+    "parent_name": "Bakery"
+   },
+   "keywords": [
+    "bread",
+    "wholemeal bread",
+    "whole wheat bread",
+    "toast"
+   ],
+   "allergens": [
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 247,
+    "protein_g": 13.0,
+    "carbs_g": 41.0,
+    "fat_g": 3.4
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_wholemeal_bread_600g"
+  },
+  {
+   "id": 4000120,
+   "name": "Gluten-Free Bread 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 17.25,
+   "original_price": null,
+   "category": {
+    "id": 7201,
+    "name": "Bread",
+    "parent_id": 7200,
+    "parent_name": "Bakery"
+   },
+   "keywords": [
+    "bread",
+    "gluten free bread",
+    "toast"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 245,
+    "protein_g": 3.0,
+    "carbs_g": 45.0,
+    "fat_g": 6.0
+   },
+   "available": true,
+   "stock": 10,
+   "recommended": false,
+   "master_product_id": "sku_gluten_free_bread_400g"
+  },
+  {
+   "id": 4000121,
+   "name": "Arabic Pita Bread 6pk",
+   "unit": "6 pcs",
+   "pack": {
+    "amount": 6,
+    "unit": "pcs"
+   },
+   "price": 4.5,
+   "original_price": null,
+   "category": {
+    "id": 7202,
+    "name": "Wraps & Pitta",
+    "parent_id": 7200,
+    "parent_name": "Bakery"
+   },
+   "keywords": [
+    "pita",
+    "pitta",
+    "khubz",
+    "arabic bread",
+    "flatbread"
+   ],
+   "allergens": [
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 275,
+    "protein_g": 9.0,
+    "carbs_g": 55.0,
+    "fat_g": 1.2
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_arabic_pita_bread_6pk"
+  },
+  {
+   "id": 4000122,
+   "name": "Whole Wheat Tortilla Wraps 8pk",
+   "unit": "8 pcs",
+   "pack": {
+    "amount": 8,
+    "unit": "pcs"
+   },
+   "price": 11.0,
+   "original_price": null,
+   "category": {
+    "id": 7202,
+    "name": "Wraps & Pitta",
+    "parent_id": 7200,
+    "parent_name": "Bakery"
+   },
+   "keywords": [
+    "tortilla",
+    "wrap",
+    "wraps",
+    "tortilla wraps"
+   ],
+   "allergens": [
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 300,
+    "protein_g": 9.0,
+    "carbs_g": 50.0,
+    "fat_g": 7.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_whole_wheat_tortilla_wraps_8pk"
+  },
+  {
+   "id": 4000123,
+   "name": "Red Apples 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 9.5,
+   "original_price": null,
+   "category": {
+    "id": 7301,
+    "name": "Fruits",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "apple",
+    "red apple"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 52,
+    "protein_g": 0.3,
+    "carbs_g": 14.0,
+    "fat_g": 0.2
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_red_apples_1kg"
+  },
+  {
+   "id": 4000124,
+   "name": "Lemons 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 4.75,
+   "original_price": null,
+   "category": {
+    "id": 7301,
+    "name": "Fruits",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "lemon",
+    "lemon juice"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 29,
+    "protein_g": 1.1,
+    "carbs_g": 9.0,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_lemons_500g"
+  },
+  {
+   "id": 4000125,
+   "name": "Blueberries 125g",
+   "unit": "125 g",
+   "pack": {
+    "amount": 125,
+    "unit": "g"
+   },
+   "price": 12.0,
+   "original_price": 15.0,
+   "category": {
+    "id": 7301,
+    "name": "Fruits",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "blueberry",
+    "berries"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 57,
+    "protein_g": 0.7,
+    "carbs_g": 14.0,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 15,
+   "recommended": false,
+   "master_product_id": "sku_blueberries_125g"
+  },
+  {
+   "id": 4000126,
+   "name": "Tomatoes 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 6.5,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "tomato",
+    "fresh tomato"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 18,
+    "protein_g": 0.9,
+    "carbs_g": 3.9,
+    "fat_g": 0.2
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": true,
+   "master_product_id": "sku_tomatoes_1kg"
+  },
+  {
+   "id": 4000127,
+   "name": "Cherry Tomatoes 250g",
+   "unit": "250 g",
+   "pack": {
+    "amount": 250,
+    "unit": "g"
+   },
+   "price": 6.25,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "cherry tomato",
+    "tomato"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 18,
+    "protein_g": 0.9,
+    "carbs_g": 3.9,
+    "fat_g": 0.2
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_cherry_tomatoes_250g"
+  },
+  {
+   "id": 4000128,
+   "name": "Cucumbers 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 4.25,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "cucumber"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 15,
+    "protein_g": 0.7,
+    "carbs_g": 3.6,
+    "fat_g": 0.1
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_cucumbers_500g"
+  },
+  {
+   "id": 4000129,
+   "name": "Red Onions 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 4.95,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "onion",
+    "red onion"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 40,
+    "protein_g": 1.1,
+    "carbs_g": 9.3,
+    "fat_g": 0.1
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_red_onions_1kg"
+  },
+  {
+   "id": 4000130,
+   "name": "Garlic 200g",
+   "unit": "200 g",
+   "pack": {
+    "amount": 200,
+    "unit": "g"
+   },
+   "price": 5.5,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "garlic"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 149,
+    "protein_g": 6.4,
+    "carbs_g": 33.0,
+    "fat_g": 0.5
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_garlic_200g"
+  },
+  {
+   "id": 4000131,
+   "name": "Potatoes 2kg",
+   "unit": "2 kg",
+   "pack": {
+    "amount": 2000,
+    "unit": "g"
+   },
+   "price": 8.75,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "potato"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 77,
+    "protein_g": 2.0,
+    "carbs_g": 17.0,
+    "fat_g": 0.1
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_potatoes_2kg"
+  },
+  {
+   "id": 4000132,
+   "name": "Sweet Potatoes 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 9.25,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "sweet potato"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 86,
+    "protein_g": 1.6,
+    "carbs_g": 20.0,
+    "fat_g": 0.1
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_sweet_potatoes_1kg"
+  },
+  {
+   "id": 4000133,
+   "name": "Baby Spinach 200g",
+   "unit": "200 g",
+   "pack": {
+    "amount": 200,
+    "unit": "g"
+   },
+   "price": 8.0,
+   "original_price": 10.0,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "spinach",
+    "baby spinach",
+    "greens",
+    "salad leaves"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 23,
+    "protein_g": 2.9,
+    "carbs_g": 3.6,
+    "fat_g": 0.4
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": true,
+   "master_product_id": "sku_baby_spinach_200g"
+  },
+  {
+   "id": 4000134,
+   "name": "Broccoli 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 7.5,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "broccoli"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 34,
+    "protein_g": 2.8,
+    "carbs_g": 7.0,
+    "fat_g": 0.4
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_broccoli_500g"
+  },
+  {
+   "id": 4000135,
+   "name": "Carrots 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 4.5,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "carrot"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 41,
+    "protein_g": 0.9,
+    "carbs_g": 10.0,
+    "fat_g": 0.2
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_carrots_1kg"
+  },
+  {
+   "id": 4000136,
+   "name": "Mixed Bell Peppers 3pk",
+   "unit": "3 pcs",
+   "pack": {
+    "amount": 3,
+    "unit": "pcs"
+   },
+   "price": 9.75,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "bell pepper",
+    "capsicum",
+    "pepper"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 26,
+    "protein_g": 1.0,
+    "carbs_g": 6.0,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_mixed_bell_peppers_3pk"
+  },
+  {
+   "id": 4000137,
+   "name": "Zucchini 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 5.25,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "zucchini",
+    "courgette"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 17,
+    "protein_g": 1.2,
+    "carbs_g": 3.1,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_zucchini_500g"
+  },
+  {
+   "id": 4000138,
+   "name": "White Mushrooms 250g",
+   "unit": "250 g",
+   "pack": {
+    "amount": 250,
+    "unit": "g"
+   },
+   "price": 7.25,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "mushroom"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 22,
+    "protein_g": 3.1,
+    "carbs_g": 3.3,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_white_mushrooms_250g"
+  },
+  {
+   "id": 4000139,
+   "name": "Romaine Lettuce",
+   "unit": "1 pc",
+   "pack": {
+    "amount": 1,
+    "unit": "pcs"
+   },
+   "price": 5.0,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "lettuce",
+    "romaine",
+    "salad"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 17,
+    "protein_g": 1.2,
+    "carbs_g": 3.3,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_romaine_lettuce"
+  },
+  {
+   "id": 4000140,
+   "name": "Fresh Coriander 100g",
+   "unit": "100 g",
+   "pack": {
+    "amount": 100,
+    "unit": "g"
+   },
+   "price": 2.5,
+   "original_price": null,
+   "category": {
+    "id": 7303,
+    "name": "Fresh Herbs",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "coriander",
+    "cilantro",
+    "herbs"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 23,
+    "protein_g": 2.1,
+    "carbs_g": 3.7,
+    "fat_g": 0.5
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_fresh_coriander_100g"
+  },
+  {
+   "id": 4000141,
+   "name": "Fresh Parsley 100g",
+   "unit": "100 g",
+   "pack": {
+    "amount": 100,
+    "unit": "g"
+   },
+   "price": 2.5,
+   "original_price": null,
+   "category": {
+    "id": 7303,
+    "name": "Fresh Herbs",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "parsley",
+    "herbs"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 36,
+    "protein_g": 3.0,
+    "carbs_g": 6.3,
+    "fat_g": 0.8
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_fresh_parsley_100g"
+  },
+  {
+   "id": 4000142,
+   "name": "Fresh Ginger 200g",
+   "unit": "200 g",
+   "pack": {
+    "amount": 200,
+    "unit": "g"
+   },
+   "price": 4.0,
+   "original_price": null,
+   "category": {
+    "id": 7303,
+    "name": "Fresh Herbs",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "ginger"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 80,
+    "protein_g": 1.8,
+    "carbs_g": 18.0,
+    "fat_g": 0.8
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_fresh_ginger_200g"
+  },
+  {
+   "id": 4000143,
+   "name": "Chicken Breast Fillets 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 32.0,
+   "original_price": 38.0,
+   "category": {
+    "id": 7401,
+    "name": "Poultry",
+    "parent_id": 7400,
+    "parent_name": "Meat & Seafood"
+   },
+   "keywords": [
+    "chicken",
+    "chicken breast",
+    "poultry"
+   ],
+   "allergens": [],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 120,
+    "protein_g": 22.5,
+    "carbs_g": 0.0,
+    "fat_g": 2.6
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": true,
+   "master_product_id": "sku_chicken_breast_fillets_1kg"
+  },
+  {
+   "id": 4000144,
+   "name": "Boneless Chicken Thighs 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 27.5,
+   "original_price": null,
+   "category": {
+    "id": 7401,
+    "name": "Poultry",
+    "parent_id": 7400,
+    "parent_name": "Meat & Seafood"
+   },
+   "keywords": [
+    "chicken",
+    "chicken thigh",
+    "poultry"
+   ],
+   "allergens": [],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 177,
+    "protein_g": 18.0,
+    "carbs_g": 0.0,
+    "fat_g": 11.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_boneless_chicken_thighs_1kg"
+  },
+  {
+   "id": 4000145,
+   "name": "Whole Chicken 1.2kg",
+   "unit": "1.2 kg",
+   "pack": {
+    "amount": 1200,
+    "unit": "g"
+   },
+   "price": 24.0,
+   "original_price": null,
+   "category": {
+    "id": 7401,
+    "name": "Poultry",
+    "parent_id": 7400,
+    "parent_name": "Meat & Seafood"
+   },
+   "keywords": [
+    "whole chicken",
+    "chicken"
+   ],
+   "allergens": [],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 215,
+    "protein_g": 18.6,
+    "carbs_g": 0.0,
+    "fat_g": 15.1
+   },
+   "available": true,
+   "stock": 10,
+   "recommended": false,
+   "master_product_id": "sku_whole_chicken_1_2kg"
+  },
+  {
+   "id": 4000146,
+   "name": "Beef Mince 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 24.5,
+   "original_price": null,
+   "category": {
+    "id": 7402,
+    "name": "Beef & Lamb",
+    "parent_id": 7400,
+    "parent_name": "Meat & Seafood"
+   },
+   "keywords": [
+    "beef",
+    "minced beef",
+    "ground beef",
+    "mince"
+   ],
+   "allergens": [],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 250,
+    "protein_g": 17.0,
+    "carbs_g": 0.0,
+    "fat_g": 20.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_beef_mince_500g"
+  },
+  {
+   "id": 4000147,
+   "name": "Lamb Cubes 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 34.0,
+   "original_price": null,
+   "category": {
+    "id": 7402,
+    "name": "Beef & Lamb",
+    "parent_id": 7400,
+    "parent_name": "Meat & Seafood"
+   },
+   "keywords": [
+    "lamb",
+    "mutton",
+    "lamb cubes"
+   ],
+   "allergens": [],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 282,
+    "protein_g": 16.0,
+    "carbs_g": 0.0,
+    "fat_g": 23.0
+   },
+   "available": true,
+   "stock": 10,
+   "recommended": false,
+   "master_product_id": "sku_lamb_cubes_500g"
+  },
+  {
+   "id": 4000148,
+   "name": "Salmon Fillet 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 42.0,
+   "original_price": null,
+   "category": {
+    "id": 7403,
+    "name": "Fish & Seafood",
+    "parent_id": 7400,
+    "parent_name": "Meat & Seafood"
+   },
+   "keywords": [
+    "salmon",
+    "fish",
+    "salmon fillet"
+   ],
+   "allergens": [
+    "fish"
+   ],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 208,
+    "protein_g": 20.0,
+    "carbs_g": 0.0,
+    "fat_g": 13.0
+   },
+   "available": false,
+   "stock": 0,
+   "recommended": false,
+   "master_product_id": "sku_salmon_fillet_400g"
+  },
+  {
+   "id": 4000149,
+   "name": "Peeled Shrimp 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 36.5,
+   "original_price": null,
+   "category": {
+    "id": 7403,
+    "name": "Fish & Seafood",
+    "parent_id": 7400,
+    "parent_name": "Meat & Seafood"
+   },
+   "keywords": [
+    "shrimp",
+    "prawn",
+    "seafood"
+   ],
+   "allergens": [
+    "shellfish"
+   ],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 99,
+    "protein_g": 24.0,
+    "carbs_g": 0.2,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 10,
+   "recommended": false,
+   "master_product_id": "sku_peeled_shrimp_400g"
+  },
+  {
+   "id": 4000150,
+   "name": "Tuna Chunks in Water 160g",
+   "unit": "160 g",
+   "pack": {
+    "amount": 160,
+    "unit": "g"
+   },
+   "price": 6.75,
+   "original_price": null,
+   "category": {
+    "id": 7604,
+    "name": "Canned & Jarred",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "tuna",
+    "canned tuna",
+    "fish"
+   ],
+   "allergens": [
+    "fish"
+   ],
+   "diet": [
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 116,
+    "protein_g": 26.0,
+    "carbs_g": 0.0,
+    "fat_g": 1.0
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_tuna_chunks_in_water_160g"
+  },
+  {
+   "id": 4000151,
+   "name": "Green Tea 25 Bags",
+   "unit": "25 pcs",
+   "pack": {
+    "amount": 25,
+    "unit": "pcs"
+   },
+   "price": 9.5,
+   "original_price": null,
+   "category": {
+    "id": 7502,
+    "name": "Tea",
+    "parent_id": 7500,
+    "parent_name": "Coffee & Tea"
+   },
+   "keywords": [
+    "green tea",
+    "tea"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 1,
+    "protein_g": 0.0,
+    "carbs_g": 0.2,
+    "fat_g": 0.0
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_green_tea_25_bags"
+  },
+  {
+   "id": 4000152,
+   "name": "Basmati Rice 2kg",
+   "unit": "2 kg",
+   "pack": {
+    "amount": 2000,
+    "unit": "g"
+   },
+   "price": 19.5,
+   "original_price": null,
+   "category": {
+    "id": 7601,
+    "name": "Rice & Grains",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "rice",
+    "basmati rice",
+    "basmati"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 350,
+    "protein_g": 7.5,
+    "carbs_g": 78.0,
+    "fat_g": 0.9
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": true,
+   "master_product_id": "sku_basmati_rice_2kg"
+  },
+  {
+   "id": 4000153,
+   "name": "Brown Rice 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 11.75,
+   "original_price": null,
+   "category": {
+    "id": 7601,
+    "name": "Rice & Grains",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "brown rice",
+    "rice"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 362,
+    "protein_g": 7.5,
+    "carbs_g": 76.0,
+    "fat_g": 2.7
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_brown_rice_1kg"
+  },
+  {
+   "id": 4000154,
+   "name": "Rolled Oats 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 8.25,
+   "original_price": null,
+   "category": {
+    "id": 7601,
+    "name": "Rice & Grains",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "oat",
+    "oats",
+    "rolled oats",
+    "oatmeal",
+    "porridge"
+   ],
+   "allergens": [
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 389,
+    "protein_g": 16.9,
+    "carbs_g": 66.0,
+    "fat_g": 6.9
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_rolled_oats_500g"
+  },
+  {
+   "id": 4000155,
+   "name": "Quinoa 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 18.0,
+   "original_price": null,
+   "category": {
+    "id": 7601,
+    "name": "Rice & Grains",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "quinoa"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 368,
+    "protein_g": 14.0,
+    "carbs_g": 64.0,
+    "fat_g": 6.0
+   },
+   "available": true,
+   "stock": 15,
+   "recommended": false,
+   "master_product_id": "sku_quinoa_500g"
+  },
+  {
+   "id": 4000156,
+   "name": "Spaghetti 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 5.75,
+   "original_price": 7.25,
+   "category": {
+    "id": 7602,
+    "name": "Pasta & Noodles",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "spaghetti",
+    "pasta"
+   ],
+   "allergens": [
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 371,
+    "protein_g": 13.0,
+    "carbs_g": 75.0,
+    "fat_g": 1.5
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_spaghetti_500g"
+  },
+  {
+   "id": 4000157,
+   "name": "Penne Pasta 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 5.75,
+   "original_price": null,
+   "category": {
+    "id": 7602,
+    "name": "Pasta & Noodles",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "penne",
+    "pasta"
+   ],
+   "allergens": [
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 371,
+    "protein_g": 13.0,
+    "carbs_g": 75.0,
+    "fat_g": 1.5
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_penne_pasta_500g"
+  },
+  {
+   "id": 4000158,
+   "name": "Gluten-Free Fusilli 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 13.5,
+   "original_price": null,
+   "category": {
+    "id": 7602,
+    "name": "Pasta & Noodles",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "fusilli",
+    "pasta",
+    "gluten free pasta"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 357,
+    "protein_g": 7.0,
+    "carbs_g": 78.0,
+    "fat_g": 2.0
+   },
+   "available": true,
+   "stock": 15,
+   "recommended": false,
+   "master_product_id": "sku_gluten_free_fusilli_400g"
+  },
+  {
+   "id": 4000159,
+   "name": "Rice Noodles 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 8.75,
+   "original_price": null,
+   "category": {
+    "id": 7602,
+    "name": "Pasta & Noodles",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "rice noodles",
+    "noodles"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 364,
+    "protein_g": 6.0,
+    "carbs_g": 80.0,
+    "fat_g": 0.6
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_rice_noodles_400g"
+  },
+  {
+   "id": 4000160,
+   "name": "Extra Virgin Olive Oil 500ml",
+   "unit": "500 ml",
+   "pack": {
+    "amount": 500,
+    "unit": "ml"
+   },
+   "price": 26.0,
+   "original_price": null,
+   "category": {
+    "id": 7603,
+    "name": "Oils",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "olive oil",
+    "oil",
+    "extra virgin olive oil"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 884,
+    "protein_g": 0.0,
+    "carbs_g": 0.0,
+    "fat_g": 100.0
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": true,
+   "master_product_id": "sku_extra_virgin_olive_oil_500ml"
+  },
+  {
+   "id": 4000161,
+   "name": "Sunflower Oil 1.5L",
+   "unit": "1.5 L",
+   "pack": {
+    "amount": 1500,
+    "unit": "ml"
+   },
+   "price": 15.5,
+   "original_price": null,
+   "category": {
+    "id": 7603,
+    "name": "Oils",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "sunflower oil",
+    "vegetable oil",
+    "cooking oil",
+    "oil"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 884,
+    "protein_g": 0.0,
+    "carbs_g": 0.0,
+    "fat_g": 100.0
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_sunflower_oil_1_5l"
+  },
+  {
+   "id": 4000162,
+   "name": "Chopped Tomatoes 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 4.25,
+   "original_price": null,
+   "category": {
+    "id": 7604,
+    "name": "Canned & Jarred",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "chopped tomatoes",
+    "canned tomatoes",
+    "tinned tomatoes"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 21,
+    "protein_g": 1.1,
+    "carbs_g": 3.8,
+    "fat_g": 0.2
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_chopped_tomatoes_400g"
+  },
+  {
+   "id": 4000163,
+   "name": "Chickpeas 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 4.0,
+   "original_price": null,
+   "category": {
+    "id": 7609,
+    "name": "Legumes",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "chickpea",
+    "garbanzo",
+    "canned chickpeas"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 139,
+    "protein_g": 7.0,
+    "carbs_g": 22.0,
+    "fat_g": 2.6
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_chickpeas_400g"
+  },
+  {
+   "id": 4000164,
+   "name": "Red Lentils 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 9.5,
+   "original_price": null,
+   "category": {
+    "id": 7609,
+    "name": "Legumes",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "lentil",
+    "red lentil",
+    "dal"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 352,
+    "protein_g": 24.0,
+    "carbs_g": 60.0,
+    "fat_g": 1.0
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": true,
+   "master_product_id": "sku_red_lentils_1kg"
+  },
+  {
+   "id": 4000165,
+   "name": "Coconut Milk 400ml",
+   "unit": "400 ml",
+   "pack": {
+    "amount": 400,
+    "unit": "ml"
+   },
+   "price": 6.5,
+   "original_price": null,
+   "category": {
+    "id": 7604,
+    "name": "Canned & Jarred",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "coconut milk"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 197,
+    "protein_g": 2.0,
+    "carbs_g": 3.0,
+    "fat_g": 21.0
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_coconut_milk_400ml"
+  },
+  {
+   "id": 4000166,
+   "name": "Smooth Peanut Butter 340g",
+   "unit": "340 g",
+   "pack": {
+    "amount": 340,
+    "unit": "g"
+   },
+   "price": 14.25,
+   "original_price": null,
+   "category": {
+    "id": 7608,
+    "name": "Nuts, Seeds & Spreads",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "peanut butter"
+   ],
+   "allergens": [
+    "peanuts"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 588,
+    "protein_g": 25.0,
+    "carbs_g": 20.0,
+    "fat_g": 50.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_smooth_peanut_butter_340g"
+  },
+  {
+   "id": 4000167,
+   "name": "Whole Almonds 200g",
+   "unit": "200 g",
+   "pack": {
+    "amount": 200,
+    "unit": "g"
+   },
+   "price": 16.75,
+   "original_price": null,
+   "category": {
+    "id": 7608,
+    "name": "Nuts, Seeds & Spreads",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "almond",
+    "nuts"
+   ],
+   "allergens": [
+    "tree_nuts"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 579,
+    "protein_g": 21.0,
+    "carbs_g": 22.0,
+    "fat_g": 50.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_whole_almonds_200g"
+  },
+  {
+   "id": 4000168,
+   "name": "Tahini 300g",
+   "unit": "300 g",
+   "pack": {
+    "amount": 300,
+    "unit": "g"
+   },
+   "price": 12.5,
+   "original_price": null,
+   "category": {
+    "id": 7608,
+    "name": "Nuts, Seeds & Spreads",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "tahini",
+    "sesame paste"
+   ],
+   "allergens": [
+    "sesame"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 595,
+    "protein_g": 17.0,
+    "carbs_g": 21.0,
+    "fat_g": 54.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_tahini_300g"
+  },
+  {
+   "id": 4000169,
+   "name": "Natural Honey 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 22.0,
+   "original_price": null,
+   "category": {
+    "id": 7608,
+    "name": "Nuts, Seeds & Spreads",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "honey"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 304,
+    "protein_g": 0.3,
+    "carbs_g": 82.0,
+    "fat_g": 0.0
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_natural_honey_500g"
+  },
+  {
+   "id": 4000170,
+   "name": "Soy Sauce 250ml",
+   "unit": "250 ml",
+   "pack": {
+    "amount": 250,
+    "unit": "ml"
+   },
+   "price": 8.0,
+   "original_price": null,
+   "category": {
+    "id": 7606,
+    "name": "Sauces",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "soy sauce"
+   ],
+   "allergens": [
+    "soy",
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 53,
+    "protein_g": 8.0,
+    "carbs_g": 4.9,
+    "fat_g": 0.6
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_soy_sauce_250ml"
+  },
+  {
+   "id": 4000171,
+   "name": "Tomato Passata 700g",
+   "unit": "700 g",
+   "pack": {
+    "amount": 700,
+    "unit": "g"
+   },
+   "price": 7.5,
+   "original_price": null,
+   "category": {
+    "id": 7606,
+    "name": "Sauces",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "passata",
+    "tomato sauce",
+    "marinara"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 24,
+    "protein_g": 1.3,
+    "carbs_g": 4.0,
+    "fat_g": 0.2
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_tomato_passata_700g"
+  },
+  {
+   "id": 4000172,
+   "name": "Sea Salt 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 3.25,
+   "original_price": null,
+   "category": {
+    "id": 7605,
+    "name": "Spices & Seasoning",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "salt",
+    "sea salt"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 0,
+    "protein_g": 0.0,
+    "carbs_g": 0.0,
+    "fat_g": 0.0
+   },
+   "available": true,
+   "stock": 40,
+   "recommended": false,
+   "master_product_id": "sku_sea_salt_500g"
+  },
+  {
+   "id": 4000173,
+   "name": "Ground Black Pepper 100g",
+   "unit": "100 g",
+   "pack": {
+    "amount": 100,
+    "unit": "g"
+   },
+   "price": 6.5,
+   "original_price": null,
+   "category": {
+    "id": 7605,
+    "name": "Spices & Seasoning",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "black pepper",
+    "pepper"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 251,
+    "protein_g": 10.4,
+    "carbs_g": 64.0,
+    "fat_g": 3.3
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_ground_black_pepper_100g"
+  },
+  {
+   "id": 4000174,
+   "name": "Ground Cumin 100g",
+   "unit": "100 g",
+   "pack": {
+    "amount": 100,
+    "unit": "g"
+   },
+   "price": 5.75,
+   "original_price": null,
+   "category": {
+    "id": 7605,
+    "name": "Spices & Seasoning",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "cumin"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 375,
+    "protein_g": 17.8,
+    "carbs_g": 44.0,
+    "fat_g": 22.0
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_ground_cumin_100g"
+  },
+  {
+   "id": 4000175,
+   "name": "Sweet Paprika 100g",
+   "unit": "100 g",
+   "pack": {
+    "amount": 100,
+    "unit": "g"
+   },
+   "price": 5.75,
+   "original_price": null,
+   "category": {
+    "id": 7605,
+    "name": "Spices & Seasoning",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "paprika"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 282,
+    "protein_g": 14.1,
+    "carbs_g": 54.0,
+    "fat_g": 12.9
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_sweet_paprika_100g"
+  },
+  {
+   "id": 4000176,
+   "name": "Plain Flour 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 5.5,
+   "original_price": null,
+   "category": {
+    "id": 7607,
+    "name": "Baking",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "flour",
+    "plain flour",
+    "all purpose flour"
+   ],
+   "allergens": [
+    "gluten"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 364,
+    "protein_g": 10.0,
+    "carbs_g": 76.0,
+    "fat_g": 1.0
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_plain_flour_1kg"
+  },
+  {
+   "id": 4000177,
+   "name": "Frozen Mixed Vegetables 1kg",
+   "unit": "1 kg",
+   "pack": {
+    "amount": 1000,
+    "unit": "g"
+   },
+   "price": 11.25,
+   "original_price": null,
+   "category": {
+    "id": 7701,
+    "name": "Frozen Vegetables",
+    "parent_id": 7700,
+    "parent_name": "Frozen"
+   },
+   "keywords": [
+    "frozen vegetables",
+    "mixed vegetables"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 65,
+    "protein_g": 3.3,
+    "carbs_g": 13.0,
+    "fat_g": 0.5
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_frozen_mixed_vegetables_1kg"
+  },
+  {
+   "id": 4000178,
+   "name": "Frozen Garden Peas 900g",
+   "unit": "900 g",
+   "pack": {
+    "amount": 900,
+    "unit": "g"
+   },
+   "price": 8.5,
+   "original_price": null,
+   "category": {
+    "id": 7701,
+    "name": "Frozen Vegetables",
+    "parent_id": 7700,
+    "parent_name": "Frozen"
+   },
+   "keywords": [
+    "peas",
+    "green peas",
+    "frozen peas"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 81,
+    "protein_g": 5.4,
+    "carbs_g": 14.0,
+    "fat_g": 0.4
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_frozen_garden_peas_900g"
+  },
+  {
+   "id": 4000179,
+   "name": "Unsweetened Almond Milk 1L",
+   "unit": "1 L",
+   "pack": {
+    "amount": 1000,
+    "unit": "ml"
+   },
+   "price": 12.5,
+   "original_price": null,
+   "category": {
+    "id": 7803,
+    "name": "Plant Milk",
+    "parent_id": 7800,
+    "parent_name": "Beverages"
+   },
+   "keywords": [
+    "almond milk",
+    "plant milk",
+    "dairy free milk"
+   ],
+   "allergens": [
+    "tree_nuts"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 13,
+    "protein_g": 0.4,
+    "carbs_g": 0.3,
+    "fat_g": 1.1
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_unsweetened_almond_milk_1l"
+  },
+  {
+   "id": 4000180,
+   "name": "Orange Juice 1L",
+   "unit": "1 L",
+   "pack": {
+    "amount": 1000,
+    "unit": "ml"
+   },
+   "price": 9.75,
+   "original_price": null,
+   "category": {
+    "id": 7802,
+    "name": "Juice",
+    "parent_id": 7800,
+    "parent_name": "Beverages"
+   },
+   "keywords": [
+    "orange juice",
+    "juice"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 45,
+    "protein_g": 0.7,
+    "carbs_g": 10.4,
+    "fat_g": 0.2
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_orange_juice_1l"
+  }
+ ]
+}
