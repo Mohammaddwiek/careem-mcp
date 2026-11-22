@@ -341,6 +341,20 @@ def detail_item(p: Product) -> dict[str, Any]:
 
 Skeleton = Callable[[str, str, dict[str, Any]], dict[str, Any]]
 
+# Canned error scenarios triggered by item ids, search terms, counts or totals: live mode decides
+# these from the catalog and basket instead. Every other canned error (bad coordinates, upstream
+# down, …) is returned as-is so it stays rehearsable.
+RECOMPUTED_ERRORS: dict[str, set[str]] = {
+    "search_groceries_items": {"no-results", "partial-results"},
+    "groceries_get_items_details": {"unknown-item"},
+    "create_grocery_cart_with_quantities": {"avocado-out-of-stock", "unknown-item", "eggs-low-stock", "unpriced-item"},
+    "cart_add_item": {"out-of-stock", "item-unavailable"},
+    "cart_add_items": {"partial-out-of-stock"},
+    "cart_update_item": {"out-of-stock", "line-not-found"},
+    "cart_delete_items": {"item-not-found", "basket-emptied"},
+    "cart_grocery_checkout": {"price-changed"},
+}
+
 
 class LiveMode:
     TOOLS = {
@@ -495,9 +509,11 @@ class LiveMode:
             p = self._product(cid)
             n = self._addable(b, p, int(it.get("count") or 0))
             if p is None:
-                results.append({"catalog_item_id": cid, "success": False, "error": "item is not available at this merchant"})
+                results.append({"catalog_item_id": cid, "item_uuid": str(uuid.uuid4()), "success": False,
+                                "error": "item is not available at this merchant"})
             elif not p.available or n == 0:
-                results.append({"catalog_item_id": cid, "success": False, "error": f"{p.name} is currently out of stock at Careem Quik Dubai Marina."})
+                results.append({"catalog_item_id": cid, "item_uuid": str(uuid.uuid4()), "success": False,
+                                "error": f"{p.name} is currently out of stock at Careem Quik Dubai Marina."})
             else:
                 results.append({"catalog_item_id": cid, "item_uuid": b.add(p, n), "success": True})
         out = self.envelope(canned["page"], b, args)
@@ -537,7 +553,8 @@ class LiveMode:
         total = price(b, self.catalog)["total"]
         if abs(float(args.get("total_price") or 0) - total) > 0.01:
             return self.skeleton("cart_grocery_checkout", "price-changed", args)
-        out = dict(canned)
+        base = {"cash": "cash-order", "wallet": "wallet-order"}.get(str(args.get("payment_type") or "").lower(), "card-order")
+        out = self.skeleton("cart_grocery_checkout", base, {**args, "total_price": total})
         if "amount" in out:
             out["amount"] = total
         b.clear()  # the order now owns these items

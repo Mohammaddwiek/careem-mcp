@@ -22,7 +22,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Mount, Route
 
-from . import spec
+from . import live, spec
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 WIDGET_URI = "ui://careem-mcp-app"
@@ -95,6 +95,9 @@ class CareemMCP:
             for name, tf in self.tools.items()
         }
         self.tool_list = [self._advertised(tf.definition) for _, tf in sorted(self.tools.items())]
+        self.live: live.LiveMode | None = None
+        if cfg.live_cart:
+            self.live = live.LiveMode(Path(cfg.catalog), Path(cfg.cart_state), self._skeleton)
         self.server: Server[Any] = Server(
             cfg.server_name,
             version=cfg.server_version,
@@ -143,14 +146,36 @@ class CareemMCP:
             log.error("%s -> scenario %r render error: %s", name, scenario.name, e)
             return _error_result("internal server error")
 
-        log.info(
-            "%s -> %s%s %s", name, scenario.name, " (forced)" if was_forced else "", spec.compact(args)
-        )
+        label = scenario.name + (" (forced)" if was_forced else "")
+        if self._goes_live(name, args, value, scenario.name, was_forced):
+            try:
+                value = self.live.handle(name, args, value)  # type: ignore[union-attr]
+                label = f"live (base {scenario.name})"
+            except Exception:
+                log.exception("%s -> live handler failed", name)
+                return _error_result("internal server error")
+
+        log.info("%s -> %s %s", name, label, spec.compact(args))
         return types.CallToolResult(
             content=[types.TextContent(type="text", text=spec.compact(value))],
             structured_content=value if isinstance(value, dict) else None,
             is_error=scenario.is_error,
         )
+
+    def _skeleton(self, tool: str, scenario: str, args: dict[str, Any]) -> dict[str, Any]:
+        """Render one named scenario of a tool (the live handlers' response skeletons)."""
+        tf = spec.parse_tool_file(self.paths[tool])
+        s = tf.scenario(scenario)
+        if s is None:
+            raise spec.SpecError(f"{tool}: no scenario {scenario!r}")
+        return json.loads(spec.render(s.template, args))
+
+    def _goes_live(self, name: str, args: dict[str, Any], canned: Any, scenario: str, forced: bool) -> bool:
+        if self.live is None or name not in self.live.TOOLS or forced:
+            return False
+        if isinstance(canned, dict) and canned.get("error") and scenario not in live.RECOMPUTED_ERRORS.get(name, set()):
+            return False  # keep the canned failure scenarios rehearsable
+        return args.get("merchant_id") in (None, live.QUIK_MERCHANT)
 
     # ------------------------------------------------------------ resources
 
@@ -243,6 +268,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--allowed-host", action="append", default=[], help="extra Host header to accept (tunnels)")
     p.add_argument("--no-output-schema", action="store_true", help="drop outputSchema from tools/list")
     p.add_argument("--no-meta", action="store_true", help="drop _meta and the widget resource")
+    p.add_argument("--live-cart", action="store_true", default=env("CAREEM_MCP_LIVE_CART") == "1",
+                   help="answer grocery search/cart tools from catalog/quik.json and a stored basket")
+    p.add_argument("--catalog", default=env("CAREEM_MCP_CATALOG", str(PROJECT_DIR / "catalog" / "quik.json")))
+    p.add_argument("--cart-state", default=env("CAREEM_MCP_CART_STATE", str(PROJECT_DIR / ".run" / "cart.json")))
     return p
 
 
