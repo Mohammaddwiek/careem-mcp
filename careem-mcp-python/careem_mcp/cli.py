@@ -13,7 +13,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-from . import spec
+from . import live, spec
 from .server import PROJECT_DIR
 
 RUN_DIR = PROJECT_DIR / ".run"
@@ -21,6 +21,8 @@ PID_FILE = RUN_DIR / "server.pid"
 LOG_FILE = RUN_DIR / "server.log"
 OVERRIDES = Path(os.environ.get("CAREEM_MCP_OVERRIDES", RUN_DIR / "overrides.json"))
 SPEC_DIR = Path(os.environ.get("CAREEM_MCP_SPEC_DIR", PROJECT_DIR / "spec"))
+CART_STATE = Path(os.environ.get("CAREEM_MCP_CART_STATE", RUN_DIR / "cart.json"))
+CATALOG = Path(os.environ.get("CAREEM_MCP_CATALOG", PROJECT_DIR / "catalog" / "quik.json"))
 PORT = int(os.environ.get("CAREEM_MCP_PORT", "8787"))
 HOST = os.environ.get("CAREEM_MCP_HOST", "127.0.0.1")
 
@@ -201,6 +203,28 @@ def cmd_reset() -> int:
     return 0
 
 
+def cmd_cart(action: str) -> int:
+    basket = live.Basket(CART_STATE)
+    if action == "reset":
+        basket.reset()
+        print("basket reset to the starting basket")
+    elif action == "clear":
+        basket.clear()
+        print("basket emptied")
+    catalog = live.load_catalog(CATALOG)
+    for line in basket.lines:
+        p = catalog.get(int(line["catalog_item_id"]))
+        name = p.name if p else f"unknown item {line['catalog_item_id']}"
+        cost = live.line_price(p, line["count"])["total"] if p else 0.0
+        print(f"  {line['count']:>3} x {name:<36} AED {cost:>7.2f}   {line['item_uuid']}")
+    pr = live.price(basket, catalog)
+    if not basket.lines:
+        print("  (empty)")
+    print(f"  subtotal {pr['subtotal']:.2f} + delivery {pr['delivery']:.2f} + service {pr['service']:.2f}"
+          f" = AED {pr['total']:.2f}" + (f" (saving {pr['saving']:.2f})" if pr["saving"] else ""))
+    return 0
+
+
 def check(spec_dir: Path = SPEC_DIR) -> list[str]:
     """FORMAT.md 'Keeping scenarios honest': render every scenario forced, validate against outputSchema."""
     problems: list[str] = []
@@ -241,7 +265,9 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="careem-mcp")
     sub = p.add_subparsers(dest="cmd", required=True)
     start = sub.add_parser("start", help="start the HTTP server in the background")
-    start.add_argument("extra", nargs=argparse.REMAINDER, help="extra server flags")
+    start.add_argument("--live-cart", action="store_true", help="live catalog + editable basket")
+    cart = sub.add_parser("cart", help="show the live basket; 'reset' restores the starting basket, 'clear' empties it")
+    cart.add_argument("action", nargs="?", choices=["show", "reset", "clear"], default="show")
     sub.add_parser("stop")
     sub.add_parser("status")
     logs = sub.add_parser("logs")
@@ -256,7 +282,9 @@ def main(argv: list[str] | None = None) -> int:
     a = p.parse_args(argv)
     try:
         if a.cmd == "start":
-            return cmd_start(a.extra)
+            return cmd_start(["--live-cart"] if a.live_cart else [])
+        if a.cmd == "cart":
+            return cmd_cart(a.action)
         if a.cmd == "stop":
             return cmd_stop()
         if a.cmd == "status":
