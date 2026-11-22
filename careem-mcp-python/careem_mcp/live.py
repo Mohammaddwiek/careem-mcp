@@ -11,6 +11,7 @@ import copy
 import json
 import os
 import re
+import time
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -188,9 +189,20 @@ class Basket:
     def save(self) -> None:
         self.version += 1
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        text = json.dumps({"version": self.version, "lines": self.lines}, indent=2) + "\n"
         tmp = self.path.with_name(self.path.name + ".tmp")
-        tmp.write_text(json.dumps({"version": self.version, "lines": self.lines}, indent=2) + "\n")
-        os.replace(tmp, self.path)  # atomic: a crash mid-write never leaves a half-written basket
+        tmp.write_text(text)
+        # Atomic rename, so a crash mid-write never leaves a half-written basket. On Windows,
+        # OneDrive sync and antivirus briefly lock files, which makes the rename fail with
+        # "Access is denied": retry for about a second, then write in place rather than lose the cart.
+        for attempt in range(10):
+            try:
+                os.replace(tmp, self.path)
+                return
+            except PermissionError:
+                time.sleep(0.1 * (attempt + 1) / 5)
+        self.path.write_text(text)
+        tmp.unlink(missing_ok=True)
 
     def line(self, item_uuid: str) -> dict[str, Any] | None:
         return next((l for l in self.lines if l["item_uuid"] == item_uuid), None)

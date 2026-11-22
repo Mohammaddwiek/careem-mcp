@@ -222,7 +222,9 @@
 .ingredients { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .ingredients li { display: flex; flex-direction: column; gap: 2px; padding: var(--space-3) 0; border-top: 1px solid var(--border-subtle); }
 .ing-amount { font-weight: 600; }
-.ing-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; }
+.ing-tag { display: flex; align-items: flex-start; gap: 6px; font-size: 0.875rem; }
+.ing-tag svg { flex: none; margin-top: 3px; }
+.ing-tag .num, .need-price, .cart-price .num, .deal-prices .num { white-space: nowrap; }
 .ing-tag.have { color: var(--brand-text); font-weight: 600; }
 .ing-tag.buy { color: var(--text-secondary); }
 .ing-tag.buy svg { color: var(--brand-text); }
