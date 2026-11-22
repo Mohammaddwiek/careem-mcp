@@ -279,10 +279,12 @@ def main(argv: list[str] | None = None) -> int:
     one.add_argument("name", nargs="?")
     sub.add_parser("reset", help="clear all forced scenarios")
     sub.add_parser("check", help="validate every scenario against its output schema")
-    a = p.parse_args(argv)
+    a, extra = p.parse_known_args(argv)
+    if extra and a.cmd != "start":
+        p.error(f"unrecognized arguments: {' '.join(extra)}")
     try:
-        if a.cmd == "start":
-            return cmd_start(["--live-cart"] if a.live_cart else [])
+        if a.cmd == "start":  # any other flags go to the server (e.g. --allowed-host for tunnels)
+            return cmd_start((["--live-cart"] if a.live_cart else []) + extra)
         if a.cmd == "cart":
             return cmd_cart(a.action)
         if a.cmd == "stop":

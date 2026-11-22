@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import re
 import uuid
 from collections.abc import Callable
@@ -28,7 +29,11 @@ SEED_LINES = [
     {"item_uuid": "7c2d9e10-2222-4b8f-8d02-000000000003", "catalog_item_id": "4000103", "count": 1},
 ]
 SEED_VERSION = 3
-STOPWORDS = {"fresh", "the", "a", "an", "of", "and", "for", "some", "g", "kg", "ml", "l", "pack", "pcs", "x"}
+STOPWORDS = {
+    "the", "a", "an", "of", "and", "for", "some", "g", "kg", "ml", "l", "pack", "pcs", "x",
+    # descriptors a shopper or planner adds that never change which product to buy
+    "fresh", "boneless", "skinless", "large", "medium", "small", "ripe", "raw", "lean", "organic",
+}
 ALLERGEN_LABELS = {
     "gluten": "Gluten", "dairy": "Milk", "egg": "Egg", "peanuts": "Peanuts", "tree_nuts": "Tree nuts",
     "soy": "Soy", "fish": "Fish", "shellfish": "Shellfish", "sesame": "Sesame",
@@ -124,13 +129,12 @@ def search(
     recommended: bool = False,
     usual_ids: set[int] | frozenset[int] = frozenset(),
 ) -> list[Product]:
-    """Products matching a search term: every meaningful term word is in the product's name or
-    keywords; failing that, any keyword phrase that appears inside the term. Best match first."""
+    """Products matching a search term: every meaningful word of the term is in the product's name
+    or keywords. No looser fallback: "oat milk" must not return dairy milk. Best match first."""
     words = [w for w in _tokens(term) if w not in STOPWORDS]
     if not words:
         return []
     phrase = " ".join(words)
-    padded = f" {phrase} "
 
     def ok(p: Product) -> bool:
         return (
@@ -147,13 +151,9 @@ def search(
         for k in p.keywords:
             vocab.update(_tokens(k))
         kw = [_phrase(k) for k in p.keywords]
-        if set(words) <= vocab:
-            rank = 0 if phrase in kw else (1 if kw and kw[0].split()[0] in words else 2)
-        elif any(f" {k} " in padded for k in kw if k):
-            longest = max(len(k) for k in kw if k and f" {k} " in padded)
-            rank = 3 - min(longest, 99) / 100
-        else:
+        if not set(words) <= vocab:
             continue
+        rank = 0 if phrase in kw else (1 if kw and kw[0].split()[0] in words else 2)
         scored.append(((rank, not p.available, len(p.name), p.id), p))
     scored.sort(key=lambda s: s[0])
     return [p for _, p in scored]
@@ -188,7 +188,9 @@ class Basket:
     def save(self) -> None:
         self.version += 1
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.path.write_text(json.dumps({"version": self.version, "lines": self.lines}, indent=2) + "\n")
+        tmp = self.path.with_name(self.path.name + ".tmp")
+        tmp.write_text(json.dumps({"version": self.version, "lines": self.lines}, indent=2) + "\n")
+        os.replace(tmp, self.path)  # atomic: a crash mid-write never leaves a half-written basket
 
     def line(self, item_uuid: str) -> dict[str, Any] | None:
         return next((l for l in self.lines if l["item_uuid"] == item_uuid), None)
@@ -341,18 +343,26 @@ def detail_item(p: Product) -> dict[str, Any]:
 
 Skeleton = Callable[[str, str, dict[str, Any]], dict[str, Any]]
 
-# Canned error scenarios triggered by item ids, search terms, counts or totals: live mode decides
-# these from the catalog and basket instead. Every other canned error (bad coordinates, upstream
-# down, …) is returned as-is so it stays rehearsable.
-RECOMPUTED_ERRORS: dict[str, set[str]] = {
-    "search_groceries_items": {"no-results", "partial-results"},
-    "groceries_get_items_details": {"unknown-item"},
-    "create_grocery_cart_with_quantities": {"avocado-out-of-stock", "unknown-item", "eggs-low-stock", "unpriced-item"},
-    "cart_add_item": {"out-of-stock", "item-unavailable"},
-    "cart_add_items": {"partial-out-of-stock"},
-    "cart_update_item": {"out-of-stock", "line-not-found"},
-    "cart_delete_items": {"item-not-found", "basket-emptied"},
-    "cart_grocery_checkout": {"price-changed"},
+# The canned scenarios live mode may replace: happy paths, plus outcomes decided by item ids,
+# search terms, counts or totals (which live mode decides from the catalog and basket). Any other
+# matched scenario (bad coordinates, upstream or pricing down, no deals, scheduled slots, …) is
+# returned as-is so it stays rehearsable.
+LIVE_SCENARIOS: dict[str, set[str]] = {
+    "search_groceries_items": {"generic-results", "partial-results", "no-results", "quik-fallback", "existing-basket",
+                               "breakfast-trio", "milk", "eggs", "bread", "on-discount"},
+    "groceries_get_items_details": {"milk-and-eggs", "coffee", "avocado", "unknown-item"},
+    "search_groceries_get_all_deals": {"deals"},
+    "create_grocery_cart_with_quantities": {"breakfast-cart", "avocado-out-of-stock", "unknown-item", "eggs-low-stock",
+                                            "unpriced-item", "existing-basket", "card-default-cash-fallback"},
+    "cart_get_quik_basket": {"quik-basket"},
+    "cart_get_basket": {"grocery-basket"},
+    "cart_get_basket_price": {"grocery-price"},
+    "cart_add_item": {"grocery-add", "out-of-stock", "item-unavailable"},
+    "cart_add_items": {"grocery-batch", "partial-out-of-stock"},
+    "cart_update_item": {"syrniki-to-3", "out-of-stock", "line-not-found"},
+    "cart_delete_items": {"cappuccino-removed", "item-not-found", "basket-emptied"},
+    "cart_delete_basket": {"deleted"},
+    "cart_grocery_checkout": {"card-order", "cash-order", "wallet-order", "price-changed"},
 }
 
 
@@ -380,9 +390,9 @@ class LiveMode:
     # ------------------------------------------------------------ catalog tools
 
     def _search_groceries_items(self, args: dict[str, Any], canned: dict[str, Any]) -> dict[str, Any]:
-        if canned.get("fallback") is not None:
-            return canned  # Shops fallback for things Quik doesn't sell
-        limit = args.get("limit") or 10
+        # Careem Shops fallbacks the canned answer offers for terms Quik doesn't sell (e.g. kombucha)
+        fallbacks = {str(g.get("name", "")).lower(): g for g in canned.get("groups") or [] if g.get("fallback")}
+        limit = max(args.get("limit") or 10, 1)
         page = max(args.get("page") or 1, 1)
         groups = []
         for term in args.get("search_terms") or []:
@@ -395,6 +405,8 @@ class LiveMode:
             )[(page - 1) * limit : page * limit]
             if hits:
                 groups.append({"name": term, "items": [search_item(p) for p in hits]})
+            elif term.lower() in fallbacks:
+                groups.append(fallbacks[term.lower()])
         if not groups:
             return self.skeleton("search_groceries_items", "no-results", args)
         out = self.skeleton("search_groceries_items", "generic-results", args)
@@ -496,9 +508,19 @@ class LiveMode:
         p = self._product(args.get("catalog_item_id"))
         if p is None:
             return self.skeleton("cart_add_item", "item-unavailable", args)
-        if not p.available:
-            return self.skeleton("cart_add_item", "out-of-stock", args)
-        b.add(p, self._addable(b, p, int(args.get("count") or 0)))
+        count = int(args.get("count") or 0)
+        if count <= 0:  # "0 to remove", as the tool description says
+            for line in [l for l in b.lines if l["catalog_item_id"] == str(p.id)]:
+                b.set_count(line["item_uuid"], 0)
+            return self.envelope(canned["page"], b, args)
+        n = self._addable(b, p, count)
+        if n == 0:
+            out = self.skeleton("cart_add_item", "out-of-stock", args)
+            left = 0 if not p.available else max(0, p.stock - b.count_of(p.id))
+            out["error"] = f"{p.name} is currently out of stock at Careem Quik Dubai Marina." if left == 0 else \
+                f"Only {left} of {p.name} available at Careem Quik Dubai Marina."
+            return out
+        b.add(p, n)
         return self.envelope(canned["page"], b, args)
 
     def _cart_add_items(self, args: dict[str, Any], canned: dict[str, Any]) -> dict[str, Any]:
@@ -563,6 +585,7 @@ class LiveMode:
     def _create_grocery_cart_with_quantities(self, args: dict[str, Any], canned: dict[str, Any]) -> dict[str, Any]:
         b = self.basket()
         data = copy.deepcopy(canned["data"])
+        data["has_existing_items"] = bool(b.lines)  # tells the model the basket already had items
         groups, failed = [], []
         for it in args.get("items") or []:
             keyword, qty = it.get("keyword", ""), int(it.get("quantity") or 0)

@@ -173,8 +173,8 @@ class CareemMCP:
     def _goes_live(self, name: str, args: dict[str, Any], canned: Any, scenario: str, forced: bool) -> bool:
         if self.live is None or name not in self.live.TOOLS or forced:
             return False
-        if isinstance(canned, dict) and canned.get("error") and scenario not in live.RECOMPUTED_ERRORS.get(name, set()):
-            return False  # keep the canned failure scenarios rehearsable
+        if scenario not in live.LIVE_SCENARIOS.get(name, set()):
+            return False  # keep canned failure/degraded scenarios rehearsable
         return args.get("merchant_id") in (None, live.QUIK_MERCHANT)
 
     # ------------------------------------------------------------ resources

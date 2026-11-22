@@ -235,3 +235,69 @@ def test_live_errors_still_canned(live_client):
     assert "error" in r
     r = live_client("cart_get_basket_price", {"merchant_id": 30104, **HOME})
     assert r["merchant"]["id"] == 30104  # food basket stays canned
+
+
+# ---------------------------------------------------------------- final review fixes
+
+
+def test_review_search_has_no_wrong_substitutes(catalog):
+    for term in ["oat milk", "sour cream", "ice cream", "tomato paste", "egg noodles", "green onion"]:
+        assert live.search(catalog, term) == [], term
+    assert live.search(catalog, "large ripe bananas")[0].id == 4000104
+
+
+def test_review_failed_write_keeps_old_basket(tmp_path, catalog, monkeypatch):
+    path = tmp_path / "cart.json"
+    b = live.Basket(path)
+    b.clear()
+    b.add(catalog[4000143], 1)
+    real_write = Path.write_text
+
+    def crash_mid_write(self, data, *a, **k):
+        real_write(self, data[: len(data) // 2], *a, **k)
+        raise OSError("disk went away")
+
+    monkeypatch.setattr(Path, "write_text", crash_mid_write)
+    with pytest.raises(OSError):
+        live.Basket(path).add(catalog[4000126], 1)
+    monkeypatch.undo()
+    assert [l["catalog_item_id"] for l in live.Basket(path).lines] == ["4000143"]
+
+
+def test_review_cli_start_passes_extra_flags(monkeypatch):
+    from careem_mcp import cli
+
+    seen = {}
+    monkeypatch.setattr(cli, "cmd_start", lambda extra: seen.setdefault("extra", extra) and 0)
+    cli.main(["start", "--live-cart", "--allowed-host", "x.trycloudflare.com"])
+    assert seen["extra"] == ["--live-cart", "--allowed-host", "x.trycloudflare.com"]
+
+
+def test_review_kombucha_keeps_shops_fallback(live_client):
+    r = live_client("search_groceries_items", {"search_terms": ["kombucha", "tomatoes"], **HOME})
+    groups = {g["name"]: g for g in r["groups"]}
+    assert groups["kombucha"].get("fallback") and groups["tomatoes"]["items"][0]["id"] == 4000126
+
+
+def test_review_has_existing_items_reflects_basket(live_client):
+    item = [{"keyword": "yogurt", "catalog_item_id": "4000107", "quantity": 1}]
+    assert live_client("create_grocery_cart_with_quantities", {**Q, "items": item})["data"]["has_existing_items"] is True
+    live_client("cart_delete_basket", Q)
+    assert live_client("create_grocery_cart_with_quantities", {**Q, "items": item})["data"]["has_existing_items"] is False
+
+
+def test_review_add_item_reports_stock_and_zero_removes(live_client):
+    live_client("cart_add_item", {**Q, "catalog_item_id": "4000103", "count": 14})  # seed has 1 → 15 = stock
+    r = live_client("cart_add_item", {**Q, "catalog_item_id": "4000103", "count": 1})
+    assert "out of stock" in r["error"]
+    r = live_client("cart_add_item", {**Q, "catalog_item_id": "4000103", "count": 0})
+    assert all(l["catalog_item_id"] != "4000103" for l in r["basket"]["items"])
+
+
+def test_review_degraded_scenarios_stay_canned(live_client):
+    r = live_client("cart_get_quik_basket", {**HOME, "timezone": "Asia/Dubai pricing-down"})
+    canned_counts = [l["count"] for l in r["basket"]["items"]] if r.get("basket") else None
+    live_client("cart_delete_basket", Q)
+    r2 = live_client("cart_get_quik_basket", {**HOME, "timezone": "Asia/Dubai pricing-down"})
+    assert r2 == r and canned_counts is not None  # canned answer, unaffected by the live basket
+    assert live_client("search_groceries_get_all_deals", {"latitude": 1, "longitude": 55.1})["groups"] in (None, [])
