@@ -1,10 +1,14 @@
-import { ChefHat, MapPin, Moon, ShoppingCart, Sun } from 'lucide-react'
+import { ChefHat, ChevronLeft, MapPin, Moon, ShoppingCart, Sun } from 'lucide-react'
 import { MotionConfig, motion, useReducedMotion } from 'motion/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { aed, api, type Address, type Bootstrap, type Cart, type CartLine, type Plan, type Product, type Recipe } from './api'
 import { CartSheet, type Payment } from './CartSheet'
 import { FlyLayer, type Flyer } from './FlyLayer'
-import { lineFor, type ShopLine } from './helpers'
+import { lineFor, screenRect, scrollScreenTop, type ShopLine } from './helpers'
+import { ErrorBoundary } from './ErrorBoundary'
+import { PhoneFrame } from './PhoneFrame'
+import { CareemHome } from './screens/CareemHome'
+import { PlanLoader } from './screens/PlanLoader'
 import { RecipeDrawer } from './RecipeDrawer'
 import { PlanError, PlanView } from './screens/PlanView'
 import { Shop } from './screens/Shop'
@@ -13,7 +17,7 @@ import { Banner } from './ui'
 import { DEFAULT_ANSWERS, planBody, type Answers } from './wizard/answers'
 import { Wizard } from './wizard/Wizard'
 
-type View = 'wizard' | 'plan' | 'track'
+type View = 'home' | 'wizard' | 'loading' | 'plan' | 'track'
 
 export default function App() {
   const dev = useMemo(() => new URLSearchParams(location.search).has('dev'), [])
@@ -23,7 +27,8 @@ export default function App() {
   const [bootError, setBootError] = useState<string | null>(null)
   const [address, setAddress] = useState<Address | null>(null)
   const [products, setProducts] = useState<Map<number, Product>>(new Map())
-  const [view, setView] = useState<View>('wizard')
+  const [view, setView] = useState<View>('home')
+  const [pending, setPending] = useState<Plan | null>(null)
   const [wizardStep, setWizardStep] = useState(0)
   const [answers, setAnswers] = useState<Answers>(DEFAULT_ANSWERS)
   const [tab, setTab] = useState<'plan' | 'shop'>('plan')
@@ -69,7 +74,7 @@ export default function App() {
   useEffect(() => { if (address) api.cart(address).then(setCart).catch(() => undefined) }, [address])
 
   const closeRecipe = useCallback(() => setOpenRecipe(null), [])
-  const top = () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+  const top = () => scrollScreenTop(!reduce)
 
   const buildPlan = async (extra: Record<string, unknown> = {}) => {
     if (!address) return null
@@ -84,13 +89,20 @@ export default function App() {
     }
   }
 
+  // the loader shows the checks while the real plan is built; it hands over once both are done
   const finishWizard = async () => {
     setPlanBusy(true)
     setExclude([])
+    setPending(null)
+    setView('loading')
+    scrollScreenTop()
     const p = await buildPlan()
     setPlanBusy(false)
-    if (p) { setPlan(p); setLines({}); setTab('plan'); setView('plan'); top() }
+    if (p) setPending(p)
   }
+  const showPlan = useCallback(() => {
+    setPlan(pending); setLines({}); setTab('plan'); setView('plan'); scrollScreenTop()
+  }, [pending])
 
   const swap = async (id: string) => {
     if (!plan) return
@@ -129,11 +141,18 @@ export default function App() {
       setCart(c)
       if (c.error) { setSheetError(c.error); setSheetOpen(true); return }
       const target = cartBtn.current?.getBoundingClientRect()
-      const rows = [...document.querySelectorAll<HTMLElement>('[data-fly]')].filter((el) => !el.classList.contains('skipped'))
+      // chips launch only from rows the user can see; with none in view, from the button they pressed
+      const box = document.getElementById('phone-screen')?.getBoundingClientRect()
+      const inView = (el: Element) => { const r = el.getBoundingClientRect(); return !box || (r.bottom > box.top + 40 && r.top < box.bottom - 40) }
+      let rows = [...document.querySelectorAll<HTMLElement>('[data-fly]')].filter((el) => !el.classList.contains('skipped') && inView(el))
+      if (!rows.length) {
+        const btn = document.querySelector<HTMLElement>('.shop-actions .btn-primary')
+        if (btn) { btn.dataset.fly = 'cta'; rows = [btn] }
+      }
       if (!reduce && target && rows.length) {
         setFlyers(rows.slice(0, 14).map((el, i) => ({
-          id: `${el.dataset.fly}-${Date.now()}`, label: el.querySelector('.need-name')?.textContent ?? '',
-          from: el.getBoundingClientRect(), to: target, delay: i * 0.045,
+          id: `${el.dataset.fly}-${Date.now()}-${i}`, label: el.querySelector('.need-name')?.textContent ?? `${shopLines().length} items`,
+          from: screenRect(el.getBoundingClientRect()), to: screenRect(target), delay: i * 0.045,
         })))
       } else {
         setSheetOpen(true)
@@ -191,8 +210,17 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
+      <PhoneFrame tone={view === 'home' ? 'careem' : 'app'}>
+      <ErrorBoundary onReset={() => { setSheetOpen(false); setOpenRecipe(null); setView('home') }}>
+      {view === 'home' ? (
+        <CareemHome name={boot?.user.name ?? 'there'} onMealPrep={() => { setView(plan ? 'plan' : 'wizard'); scrollScreenTop() }} />
+      ) : (<>
       <a href="#main" className="skip-link">Skip to content</a>
       <header className="topbar glass">
+        <button type="button" className="icon-btn back-home" aria-label="Back to Careem home" disabled={view === 'loading'}
+          onClick={() => { setView('home'); scrollScreenTop() }}>
+          <ChevronLeft size={22} aria-hidden="true" />
+        </button>
         <div className="brand">
           <span className="brand-mark" aria-hidden="true"><ChefHat size={20} /></span>
           <span className="brand-name">Prep</span>
@@ -235,6 +263,10 @@ export default function App() {
             aiAvailable={boot.ai_available} products={products} remember={(p) => remember([p])} busy={planBusy}
             error={planError} onDone={finishWizard} />
         )}
+        {view === 'loading' && (
+          <PlanLoader answers={answers} ai={!!boot?.ai_available} ready={!!pending} error={planError} onFinished={showPlan}
+            onBack={() => { setPlanError(null); setView('wizard') }} />
+        )}
         {view === 'plan' && planError && <PlanError message={planError} onBack={() => setView('wizard')} />}
         {view === 'plan' && plan && boot && (
           <PlanView plan={plan} deals={boot.deals} tab={tab} setTab={(t) => { setTab(t); top() }} onOpen={(r) => setOpenRecipe(r.id)}
@@ -270,6 +302,9 @@ export default function App() {
           placing={placing} error={sheetError} onClose={() => setSheetOpen(false)} onUpdate={updateLine} onDelete={deleteLine}
           onPlace={place} />
       )}
+      </>)}
+      </ErrorBoundary>
+      </PhoneFrame>
     </MotionConfig>
   )
 }

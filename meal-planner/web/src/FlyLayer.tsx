@@ -13,7 +13,7 @@ export function FlyLayer({ flyers, onDone }: { flyers: Flyer[]; onDone: () => vo
           initial={{ x: f.from.left + 16, y: f.from.top + f.from.height / 2 - 18, scale: 1, opacity: 0.95 }}
           animate={{
             x: [f.from.left + 16, (f.from.left + f.to.left) / 2, f.to.left + f.to.width / 2 - 18],
-            y: [f.from.top + f.from.height / 2 - 18, Math.min(f.from.top, f.to.top) - 60, f.to.top + f.to.height / 2 - 18],
+            y: [f.from.top + f.from.height / 2 - 18, Math.max(f.to.top + f.to.height + 24, Math.min(f.from.top, f.to.top) - 60), f.to.top + f.to.height / 2 - 18],
             scale: [1, 0.9, 0.35],
             opacity: [0.95, 1, 0],
           }}
