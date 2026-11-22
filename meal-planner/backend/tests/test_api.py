@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import socket
 import subprocess
@@ -159,3 +160,93 @@ def test_swapped_ingredient_is_searched_by_its_replacement(client):
     p = plan(client, keep=["salmon-traybake"], appliances=["stove", "oven"], days=2, people=1)
     chicken = next(n for n in p["need"] if n["product"]["id"] == 4000143)
     assert chicken["match"]["status"] == "matched", chicken
+
+
+# ---------------------------------------------------------------- Claude (stubbed: no network in tests)
+
+from types import SimpleNamespace
+
+
+class FakeParse:
+    """Stands in for client.beta.messages.parse: records the call, returns a canned response."""
+
+    def __init__(self, respond):
+        self.respond, self.calls = respond, []
+
+    def __call__(self, **kwargs):
+        self.calls.append(kwargs)
+        return self.respond(kwargs)
+
+
+def fake_client(monkeypatch, respond):
+    from app import ai
+    parse = FakeParse(respond)
+    monkeypatch.setattr(ai, "client", lambda: SimpleNamespace(beta=SimpleNamespace(messages=SimpleNamespace(parse=parse))))
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key-not-used")
+    return parse
+
+
+def answer(summary, breakfasts, mains):
+    from app import ai
+    plan = ai.AIPlan(summary=summary, breakfasts=[ai.Pick(recipe_id=i, reason=f"because {i}") for i in breakfasts],
+                     mains=[ai.Pick(recipe_id=i, reason=f"because {i}") for i in mains])
+    return lambda _: SimpleNamespace(stop_reason="end_turn", parsed_output=plan)
+
+
+def test_claude_picks_are_used_with_reasons(client, monkeypatch):
+    parse = fake_client(monkeypatch, answer("A spicy, cheap week.", [], ["lentil-dal", "chickpea-curry", "bolognese"]))
+    p = plan(client, days=5, people=2, notes="we love spicy food")
+    assert p["ai"] == {"used": True, "summary": "A spicy, cheap week."}
+    assert [r["id"] for r in p["recipes"]] == ["lentil-dal", "chickpea-curry", "bolognese"]
+    assert p["recipes"][0]["why"] == "because lentil-dal"
+    sent = parse.calls[0]
+    assert sent["model"] == "claude-opus-5-5" and sent["fallbacks"] == "default"
+    assert sent["output_config"] == {"effort": "low"}
+    req = json.loads(sent["messages"][0]["content"])
+    assert req["their_notes"] == "we love spicy food" and req["choose"] == {"breakfasts": 0, "mains": 3}
+
+
+def test_claude_only_sees_safe_candidates(client, monkeypatch):
+    parse = fake_client(monkeypatch, answer("ok", ["pb-smoothie"], ["shrimp-noodles"]))
+    p = plan(client, allergens=["peanuts", "shellfish"], appliances=["stove", "blender"], meals="all", days=2)
+    sent_ids = {c["id"] for c in json.loads(parse.calls[0]["messages"][0]["content"])["candidates"]}
+    assert "pb-smoothie" not in sent_ids and "shrimp-noodles" not in sent_ids
+    # even if Claude names an unsafe recipe, it never reaches the plan
+    assert not {"pb-smoothie", "shrimp-noodles"} & {r["id"] for r in p["recipes"]}
+
+
+def test_invalid_claude_answer_falls_back_to_rules(client, monkeypatch):
+    fake_client(monkeypatch, answer("nonsense", ["not-a-recipe"], ["also-not-one"]))
+    p = plan(client, days=3)
+    assert p["ai"]["used"] is False and p["recipes"]
+
+
+def test_refusal_falls_back_to_rules(client, monkeypatch):
+    fake_client(monkeypatch, lambda _: SimpleNamespace(stop_reason="refusal", parsed_output=None))
+    p = plan(client, days=3)
+    assert p["ai"]["used"] is False and p["recipes"]
+
+
+def test_claude_errors_fall_back_to_rules(client, monkeypatch):
+    import anthropic
+
+    def boom(kwargs):
+        raise anthropic.APIConnectionError(message="offline", request=None)
+
+    fake_client(monkeypatch, boom)
+    assert plan(client, days=3)["ai"]["used"] is False
+
+
+def test_no_credentials_means_no_claude_call(client, monkeypatch):
+    for v in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_PROFILE"):
+        monkeypatch.delenv(v, raising=False)
+    from app import ai
+    monkeypatch.setattr(ai, "client", lambda: pytest.fail("must not call Claude without credentials"))
+    assert plan(client, days=2)["ai"]["used"] is False
+    assert client.get("/api/bootstrap").json()["ai_available"] is False
+
+
+def test_swap_does_not_call_claude(client, monkeypatch):
+    parse = fake_client(monkeypatch, answer("x", [], ["lentil-dal"]))
+    plan(client, days=2, keep=["lentil-dal"], exclude=["bolognese"])
+    assert parse.calls == []

@@ -15,7 +15,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from . import planner
+from . import ai, planner
 from .mcp import MCPClient, MCPError
 from .products import Product, from_details
 from .recipes import ALL_PRODUCT_IDS, APPLIANCES
@@ -122,6 +122,7 @@ def bootstrap(lat: float = HOME[0], lng: float = HOME[1]) -> dict[str, Any]:
         "service_error": service.get("error"),
         "usuals": usuals, "deals": deals, "products": products,
         "appliances": list(APPLIANCES), "allergens": ALLERGENS,
+        "ai_available": ai.available(),
     }
 
 
@@ -147,6 +148,7 @@ class PlanRequest(BaseModel):
     batch_cook: bool = True
     keep: list[str] = []
     exclude: list[str] = []
+    notes: str = Field("", max_length=300)
 
 
 @app.post("/api/plan")
@@ -154,9 +156,11 @@ def make_plan(req: PlanRequest) -> dict[str, Any]:
     prefs = planner.Prefs(
         pantry=set(req.pantry), appliances=set(req.appliances), allergens=set(req.allergens), diet=req.diet,
         people=req.people, days=req.days, meals=req.meals, budget=req.budget, goal=req.goal,
-        batch_cook=req.batch_cook, keep=req.keep, exclude=req.exclude,
+        batch_cook=req.batch_cook, keep=req.keep, exclude=req.exclude, notes=req.notes.strip(),
     )
-    result = planner.plan(facts(req.lat, req.lng, set(req.pantry)), prefs)
+    # Claude plans new weeks; swapping one meal (keep is set) stays rule-based so it's instant
+    chooser = ai.choose if not req.keep else None
+    result = planner.plan(facts(req.lat, req.lng, set(req.pantry)), prefs, chooser=chooser)
     if not result["recipes"]:
         return {**result, "error": "No recipes fit these settings. Try allowing another appliance or fewer restrictions."}
     # match every needed ingredient to live Careem Quik inventory in one search call

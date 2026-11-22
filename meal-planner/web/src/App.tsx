@@ -18,7 +18,7 @@ const STEPS: { key: Step; label: string }[] = [
 ]
 const DEFAULT_PREFS: Prefs = {
   pantry: [], appliances: ['stove', 'oven'], allergens: [], diet: 'any', people: 2, days: 5, meals: 'dinner',
-  budget: 250, goal: 'balanced', batch_cook: true, keep: [], exclude: [],
+  budget: 250, goal: 'balanced', batch_cook: true, keep: [], exclude: [], notes: '',
 }
 
 export default function App() {
@@ -109,7 +109,13 @@ export default function App() {
     const keep = plan.recipes.map((r) => r.id).filter((r) => r !== id)
     const exclude = [...new Set([...prefs.exclude, id])]
     setPrefs({ ...prefs, exclude })
-    await buildPlan({ keep, exclude })
+    const before = plan
+    const next = await buildPlan({ keep, exclude })
+    // a swap is planned by rules; keep Claude's summary and notes for the meals that stayed
+    if (next && !next.error && before.ai?.used) {
+      const why = new Map(before.recipes.map((r) => [r.id, r.why]))
+      setPlan({ ...next, ai: before.ai, recipes: next.recipes.map((r) => ({ ...r, why: r.why ?? why.get(r.id) ?? null })) })
+    }
     setSwapBusy(null)
   }
 
@@ -257,7 +263,7 @@ export default function App() {
 
         {boot && address && step === 'setup' && (
           <Setup boot={boot} address={address} prefs={prefs} setPrefs={setPrefs} pantryNames={pantryNames}
-            rememberProduct={(p) => remember([p])} onSubmit={submitSetup} busy={planBusy} />
+            rememberProduct={(p) => remember([p])} onSubmit={submitSetup} busy={planBusy} aiAvailable={boot.ai_available} />
         )}
         {step === 'plan' && planError && <PlanError message={planError} onBack={() => go('setup')} />}
         {step === 'plan' && plan && !plan.error && boot && (

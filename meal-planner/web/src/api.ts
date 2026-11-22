@@ -32,6 +32,7 @@ export interface Bootstrap {
   products: Product[]
   appliances: string[]
   allergens: string[]
+  ai_available: boolean
 }
 
 export type Goal = 'balanced' | 'save' | 'protein' | 'quick'
@@ -51,6 +52,7 @@ export interface Prefs {
   batch_cook: boolean
   keep: string[]
   exclude: string[]
+  notes: string
 }
 
 export interface Swap { ingredient: string; from: string; to: string; reason: string }
@@ -68,6 +70,7 @@ export interface Recipe {
   deals: string[]
   swaps: Swap[]
   ingredients: { name: string; product_id: number; product: string; amount: number; unit: string }[]
+  why?: string | null
 }
 
 export interface HaveRow {
@@ -95,6 +98,7 @@ export interface Plan {
   budget: number
   over_budget: boolean
   excluded: { recipe: string; reason: string }[]
+  ai?: { used: boolean; summary: string | null }
   error?: string
 }
 

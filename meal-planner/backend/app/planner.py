@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -27,6 +28,7 @@ class Prefs:
     batch_cook: bool = True  # cook once, eat twice
     keep: list[str] = field(default_factory=list)  # recipe ids to keep (when swapping one meal)
     exclude: list[str] = field(default_factory=list)
+    notes: str = ""  # free text for Claude, e.g. "we love spicy food"
 
 
 @dataclass
@@ -110,7 +112,10 @@ def shopping_list(picks: list[tuple[Resolved, int]], pantry: set[int]) -> tuple[
     return have, need
 
 
-def plan(facts: dict[int, Product], prefs: Prefs) -> dict[str, Any]:
+Chooser = Callable[[list[Resolved], Prefs, dict[str, int], list[str]], dict[str, Any] | None]
+
+
+def plan(facts: dict[int, Product], prefs: Prefs, chooser: Chooser | None = None) -> dict[str, Any]:
     slots = SLOT_PLANS.get(prefs.meals, SLOT_PLANS["dinner"])
     resolved: dict[str, Resolved] = {}
     excluded: list[dict[str, str]] = []
@@ -123,6 +128,15 @@ def plan(facts: dict[int, Product], prefs: Prefs) -> dict[str, Any]:
         else:
             excluded.append({"recipe": recipe.name, "reason": why or ""})
 
+    def unique_for(slot: str) -> int:
+        n = prefs.days * sum(1 for s in slots if (s == "breakfast") == (slot == "breakfast"))
+        return math.ceil(n / 2) if prefs.batch_cook else n
+
+    # Claude (when available) picks among the recipes that passed every filter; code does the rest
+    ai = chooser(list(resolved.values()), prefs, {s: unique_for(s) for s in ("breakfast", "main")},
+                 sorted(facts[i].name for i in prefs.pantry if i in facts)) if chooser else None
+    protected = set(prefs.keep) | {k for ids in (ai or {}).get("picks", {}).values() for k in ids}
+
     schedule: list[dict[str, Any]] = []
     servings: dict[str, int] = {}
     chosen: list[str] = []
@@ -131,9 +145,10 @@ def plan(facts: dict[int, Product], prefs: Prefs) -> dict[str, Any]:
         if not wanted:
             continue
         occurrences = prefs.days * len(wanted)
-        unique = math.ceil(occurrences / 2) if prefs.batch_cook else occurrences
+        unique = unique_for(slot)
         pool = [r for r in resolved.values() if r.recipe.slot == slot]
-        picks = [resolved[k] for k in prefs.keep if k in resolved and resolved[k].recipe.slot == slot]
+        first = list(prefs.keep) + ((ai or {}).get("picks", {}).get(slot) or [])
+        picks = [resolved[k] for k in dict.fromkeys(first) if k in resolved and resolved[k].recipe.slot == slot][:unique]
         used_products = {p.id for r in picks for _, p in r.lines}
         while len(picks) < unique and pool:
             options = [r for r in pool if r not in picks] or pool
@@ -162,7 +177,7 @@ def plan(facts: dict[int, Product], prefs: Prefs) -> dict[str, Any]:
             break
         improved = False
         for k in sorted(chosen, key=lambda k: -resolved[k].cost):
-            if k in prefs.keep:
+            if k in protected:  # the user's kept meals and Claude's picks aren't swapped behind their back
                 continue
             slot = resolved[k].recipe.slot
             for alt in sorted((r for r in resolved.values() if r.recipe.slot == slot and r.recipe.id not in chosen), key=lambda r: r.cost):
@@ -189,7 +204,8 @@ def plan(facts: dict[int, Product], prefs: Prefs) -> dict[str, Any]:
     estimate = round(sum(n["line_total"] for n in need), 2)
     return {
         "schedule": schedule,
-        "recipes": [recipe_json(resolved[k], servings[k]) for k in chosen],
+        "recipes": [{**recipe_json(resolved[k], servings[k]), "why": (ai or {}).get("reasons", {}).get(k)} for k in chosen],
+        "ai": {"used": ai is not None, "summary": ai["summary"] if ai else None},
         "have": have,
         "need": need,
         "estimate": estimate,

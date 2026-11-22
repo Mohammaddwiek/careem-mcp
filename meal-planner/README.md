@@ -7,6 +7,26 @@ Plan meals around what's in your kitchen, then order only what's missing from Ca
   explicit button presses; checkout also needs `confirmed: true` and is never retried.
 - `web/`: Vite + React + TypeScript, styled from the design tokens in `web/src/styles/tokens.css`.
 
+## Claude
+
+With Anthropic credentials available, new plans are chosen and explained by Claude
+(`claude-opus-5-5`, structured output, effort `low`, refusal fallback on; see `backend/app/ai.py`):
+
+- Claude only sees recipes that already passed the allergy, diet and appliance filters, and any id
+  it returns that isn't one of them is dropped, so it can't add an allergen or invent a product.
+- It writes a two-sentence summary and a reason per meal, and reads the optional "Anything else
+  Claude should know?" box in setup.
+- Quantities, prices, product ids and the cart stay in code. Swapping one meal stays rule-based so
+  it's instant.
+- No credentials, a network error, a refusal or an unusable answer falls back to the rule-based
+  plan silently. `MEAL_PLANNER_AI=off` turns Claude off; `MEAL_PLANNER_MODEL` picks another model.
+
+To turn it on, set your key in the terminal that runs the backend, then start it:
+
+```powershell
+$env:ANTHROPIC_API_KEY = "<your key>"
+```
+
 ## Run it
 
 Each in its own terminal, from the repo root:

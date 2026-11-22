@@ -31,6 +31,13 @@ export function PlanView({ plan, deals, busySwap, onSwap, onBack, onNext }: Prop
         </p>
       </header>
 
+      {plan.ai?.used && plan.ai.summary && (
+        <section className="ai-summary" aria-label="Why this plan">
+          <span className="ai-badge"><Sparkles size={15} aria-hidden="true" /> Planned with Claude</span>
+          <p>{plan.ai.summary}</p>
+        </section>
+      )}
+
       <ol className="week" aria-label="Week at a glance">
         {days.map((d) => (
           <li key={d} className="week-day">
@@ -94,6 +101,7 @@ function MealCard({ recipe: r, when, busy, onSwap }: { recipe: Recipe; when: str
         </div>
         <h3 id={`meal-${r.id}`} className="meal-name">{r.name}</h3>
         <p className="meal-blurb">{r.blurb}</p>
+        {r.why && <p className="meal-why"><Sparkles size={14} aria-hidden="true" /> {r.why}</p>}
         <div className="meal-facts">
           <span><Clock size={15} aria-hidden="true" /> {r.minutes} min</span>
           <span><Users size={15} aria-hidden="true" /> {r.servings} servings</span>

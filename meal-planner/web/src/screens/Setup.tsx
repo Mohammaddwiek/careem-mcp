@@ -22,9 +22,11 @@ interface Props {
   rememberProduct: (p: Product) => void
   onSubmit: () => void
   busy: boolean
+  aiAvailable: boolean
 }
 
-export function Setup({ boot, address, prefs, setPrefs, pantryNames, rememberProduct, onSubmit, busy }: Props) {
+export function Setup({ boot, address, prefs, setPrefs, pantryNames, rememberProduct, onSubmit, busy, aiAvailable }: Props) {
+  const notesId = useId()
   const set = <K extends keyof Prefs>(k: K, v: Prefs[K]) => setPrefs({ ...prefs, [k]: v })
   const toggle = (k: 'pantry' | 'appliances' | 'allergens', v: never) =>
     set(k, (prefs[k] as unknown[]).includes(v) ? (prefs[k] as unknown[]).filter((x) => x !== v) as never : [...prefs[k], v] as never)
@@ -151,6 +153,15 @@ export function Setup({ boot, address, prefs, setPrefs, pantryNames, rememberPro
                 { value: 'protein', label: 'Protein', icon: Dumbbell }, { value: 'quick', label: 'Speed', icon: Zap },
               ]} />
             </div>
+            {aiAvailable && (
+              <div className="field-col">
+                <label className="field-label" htmlFor={notesId}>Anything else Claude should know?</label>
+                <textarea id={notesId} className="notes" rows={3} maxLength={300} value={prefs.notes}
+                  placeholder="We love spicy food, the kids won't eat mushrooms, Thursday needs to be quick…"
+                  onChange={(e) => set('notes', e.target.value)} />
+                <span className="hint">Claude reads this when it picks your meals. Allergies above are always enforced.</span>
+              </div>
+            )}
             <label className="switch-row">
               <input type="checkbox" className="switch" checked={prefs.batch_cook} onChange={(e) => set('batch_cook', e.target.checked)} />
               <span>
@@ -168,7 +179,7 @@ export function Setup({ boot, address, prefs, setPrefs, pantryNames, rememberPro
           {prefs.people === 1 ? 'person' : 'people'}, up to <span className="num">{aed(prefs.budget)}</span>
         </p>
         <button type="submit" className="btn btn-primary btn-lg" disabled={busy}>
-          {busy ? 'Building your plan…' : 'Build my plan'}
+          {busy ? (aiAvailable ? 'Claude is planning your week…' : 'Building your plan…') : 'Build my plan'}
         </button>
       </div>
     </form>
