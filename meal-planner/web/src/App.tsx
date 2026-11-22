@@ -5,6 +5,7 @@ import { aed, api, type Address, type Bootstrap, type Cart, type CartLine, type 
 import { CartSheet, type Payment } from './CartSheet'
 import { FlyLayer, type Flyer } from './FlyLayer'
 import { lineFor, screenRect, scrollScreenTop, type ShopLine } from './helpers'
+import { BehindScenes } from './BehindScenes'
 import { ErrorBoundary } from './ErrorBoundary'
 import { PhoneFrame } from './PhoneFrame'
 import { CareemHome } from './screens/CareemHome'
@@ -48,6 +49,8 @@ export default function App() {
   const [existing, setExisting] = useState<Cart | null>(null)
   const [flyers, setFlyers] = useState<Flyer[]>([])
   const [order, setOrder] = useState<Order | null>(null)
+  const [scenes, setScenes] = useState(() => localStorage.getItem('scenes') !== 'hidden')
+  useEffect(() => { localStorage.setItem('scenes', scenes ? 'shown' : 'hidden') }, [scenes])
   const cartBtn = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -210,7 +213,13 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <PhoneFrame tone={view === 'home' ? 'careem' : 'app'}>
+      <PhoneFrame tone={view === 'home' ? 'careem' : 'app'}
+        aside={<BehindScenes hidden={!scenes} />}
+        below={
+          <button type="button" className="scenes-toggle" aria-pressed={scenes} onClick={() => setScenes(!scenes)}>
+            {scenes ? 'Hide behind the scenes' : 'Show behind the scenes'}
+          </button>
+        }>
       <ErrorBoundary onReset={() => { setSheetOpen(false); setOpenRecipe(null); setView('home') }}>
       {view === 'home' ? (
         <CareemHome name={boot?.user.name ?? 'there'} onMealPrep={() => { setView(plan ? 'plan' : 'wizard'); scrollScreenTop() }} />

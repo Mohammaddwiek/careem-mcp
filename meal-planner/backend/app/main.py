@@ -15,7 +15,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from . import ai, planner
+from . import ai, mcp_log, planner
 from .mcp import MCPClient, MCPError
 from .products import Product, from_details
 from .recipes import ALL_PRODUCT_IDS, APPLIANCES
@@ -31,6 +31,37 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s
 app = FastAPI(title="Careem Quik meal planner")
 mcp = MCPClient(os.environ.get("CAREEM_MCP_URL", "http://127.0.0.1:8787/mcp"))
 _facts: dict[str, Any] = {"at": 0.0, "data": {}}
+
+
+# which app step each request is, so the "Behind the scenes" panel can label every MCP call
+STAGES = {
+    ("GET", "/api/bootstrap"): "Opening Meal prep",
+    ("GET", "/api/search"): "Searching for a pantry item",
+    ("POST", "/api/estimate"): "Estimating your weekly cost",
+    ("POST", "/api/plan"): "Building your meal plan",
+    ("GET", "/api/cart"): "Checking your Careem Quik cart",
+    ("POST", "/api/cart"): "Filling your Careem Quik cart",
+    ("PATCH", "/api/cart/line"): "Changing a quantity",
+    ("POST", "/api/cart/line/delete"): "Removing an item",
+    ("POST", "/api/checkout"): "Placing the order",
+    ("GET", "/api/track"): "Tracking the delivery",
+}
+
+
+@app.middleware("http")
+async def tag_stage(request: Request, call_next):
+    token = mcp_log.stage.set(STAGES.get((request.method, request.url.path), "App"))
+    try:
+        return await call_next(request)
+    finally:
+        mcp_log.stage.reset(token)
+
+
+@app.get("/api/mcp-log")
+def mcp_calls(after: int = 0) -> dict[str, Any]:
+    """New MCP calls since `after` (read-only; the panel polls this)."""
+    return {"events": mcp_log.since(after), "ai": ai.available(), "model": ai.MODEL if ai.available() else None,
+            "mcp_url": mcp.url}
 
 
 @app.exception_handler(MCPError)

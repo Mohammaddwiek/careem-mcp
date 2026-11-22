@@ -10,6 +10,9 @@ Plan meals around what's in your kitchen, then order only what's missing from Ca
   where only the **Meal prep** card is clickable; on a real phone it fills the screen. After the
   10-question onboarding, an animated checklist shows the real checks (portions, allergies,
   dislikes, kitchen, deals, budget) while the plan is built.
+  Beside the phone, a **Behind the scenes** panel lists every Careem MCP call live: which app step
+  caused it, what the tool does, its arguments, the result and timing, with calls that change the
+  cart or place an order marked. The button under the phone hides or shows it (`GET /api/mcp-log`).
 
 ## Claude
 
