@@ -11,3 +11,6 @@ node_modules/
 
 # careem-mcp server runtime state (pid, logs, forced scenarios)
 .run/
+
+# web build output
+dist/
