@@ -6,9 +6,12 @@ import itertools
 import json
 import logging
 import threading
+import time
 from typing import Any
 
 import httpx
+
+from . import mcp_log
 
 log = logging.getLogger("meal-planner.mcp")
 
@@ -63,7 +66,18 @@ class MCPClient:
 
     def call(self, tool: str, args: dict[str, Any]) -> dict[str, Any]:
         """Call a tool and return its structured output. Tool-level failures (isError) raise
-        MCPError; business failures stay in the returned object's "error" field."""
+        MCPError; business failures stay in the returned object's "error" field. Every call is
+        recorded for the "Behind the scenes" panel."""
+        start = time.perf_counter()
+        try:
+            out = self._call(tool, args)
+        except MCPError as e:
+            mcp_log.record(tool, args, None, str(e), (time.perf_counter() - start) * 1000)
+            raise
+        mcp_log.record(tool, args, out, None, (time.perf_counter() - start) * 1000)
+        return out
+
+    def _call(self, tool: str, args: dict[str, Any]) -> dict[str, Any]:
         with self.lock:
             for attempt in (1, 2):
                 try:

@@ -5,7 +5,9 @@ import { useEffect, useState, type ReactNode } from 'react'
  * The screen is its own scroll area and the containing block for fixed layers, so sheets, drawers
  * and overlays stay inside the phone.
  */
-export function PhoneFrame({ tone, children }: { tone: 'careem' | 'app'; children: ReactNode }) {
+export function PhoneFrame({ tone, children, aside, below }: {
+  tone: 'careem' | 'app'; children: ReactNode; aside?: ReactNode; below?: ReactNode
+}) {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 15000)
@@ -14,6 +16,7 @@ export function PhoneFrame({ tone, children }: { tone: 'careem' | 'app'; childre
   const time = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).replace(/\s?[AP]M$/i, '')
   return (
     <div className="stage">
+      <div className="phone-col">
       <div className="phone">
         <div className="phone-inner" id="phone-inner">
           <div className={`status-bar status-${tone}`} aria-hidden="true">
@@ -29,6 +32,9 @@ export function PhoneFrame({ tone, children }: { tone: 'careem' | 'app'; childre
           <span className="home-indicator" aria-hidden="true" />
         </div>
       </div>
+      {below}
+      </div>
+      {aside}
     </div>
   )
 }

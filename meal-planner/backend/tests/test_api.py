@@ -301,3 +301,36 @@ def test_swap_and_estimate_do_not_call_claude(client, monkeypatch):
     plan(client, days=[0, 1], keep=["lentil-dal"], exclude=["bolognese"])
     client.post("/api/estimate", json={"days": [0, 1]})
     assert parse.calls == []
+
+
+
+def test_mcp_log_shows_each_call_with_its_app_step(client):
+    start = max((e["seq"] for e in client.get("/api/mcp-log").json()["events"]), default=0)
+    p = plan(client, days=[0])
+    events = client.get("/api/mcp-log", params={"after": start}).json()["events"]
+    search = [e for e in events if e["tool"] == "search_groceries_items"]
+    assert search and search[0]["stage"] == "Building your meal plan" and search[0]["mutating"] is False
+    assert search[0]["what"] and search[0]["result"].endswith("products") and search[0]["ms"] >= 0
+
+    after = events[-1]["seq"]
+    cart = client.post("/api/cart", json={"mode": "replace", "lines": lines_for(p)}).json()
+    client.post("/api/checkout", json={"total_price": cart["total"] + 9, "payment_type": "wallet", "confirmed": True})
+    events = client.get("/api/mcp-log", params={"after": after}).json()["events"]
+    by_tool = {e["tool"]: e for e in events}
+    assert by_tool["create_grocery_cart_with_quantities"]["stage"] == "Filling your Careem Quik cart"
+    assert by_tool["create_grocery_cart_with_quantities"]["mutating"] is True
+    checkout = by_tool["cart_grocery_checkout"]
+    assert checkout["stage"] == "Placing the order" and checkout["mutating"] is True
+    assert checkout["ok"] is False and "409" in checkout["result"]  # stale total, refused
+    assert all(e["seq"] > after for e in events)
+
+
+
+def test_mcp_log_treats_an_empty_cart_as_normal(client):
+    client.post("/api/cart", json={"mode": "replace", "lines": lines_for(plan(client, days=[0]))})
+    start = max(e["seq"] for e in client.get("/api/mcp-log").json()["events"])
+    from app import main
+    main.mcp.call("cart_delete_basket", {"merchant_id": 40001, "latitude": 25.0866, "longitude": 55.1474})
+    client.get("/api/cart")
+    read = [e for e in client.get("/api/mcp-log", params={"after": start}).json()["events"] if e["tool"] == "cart_get_quik_basket"]
+    assert read and read[-1]["ok"] is True and read[-1]["result"] == "No basket yet"
