@@ -134,35 +134,60 @@ def search(q: str, lat: float = HOME[0], lng: float = HOME[1]) -> dict[str, Any]
 
 
 class PlanRequest(BaseModel):
+    """The onboarding answers."""
     lat: float = HOME[0]
     lng: float = HOME[1]
-    pantry: list[int] = []
-    appliances: list[str] = ["stove"]
+    adults: int = Field(1, ge=0, le=10)
+    kids: int = Field(0, ge=0, le=10)
+    meals: list[str] = ["dinner"]
+    days: list[int] = [0, 1, 2, 3, 4]
+    appliances: list[str] = ["stovetop", "oven"]
+    diets: list[str] = []
+    vibes: list[str] = []
     allergens: list[str] = []
-    diet: str = "any"
-    people: int = Field(2, ge=1, le=8)
-    days: int = Field(5, ge=1, le=7)
-    meals: str = "dinner"
+    dislikes: list[str] = []
+    pantry: list[int] = []
     budget: float = Field(250, ge=20, le=5000)
-    goal: str = "balanced"
-    batch_cook: bool = True
+    prioritize_deals: bool = False
+    notes: str = Field("", max_length=300)
     keep: list[str] = []
     exclude: list[str] = []
-    notes: str = Field("", max_length=300)
+
+    def prefs(self, budget: float | None = None) -> planner.Prefs:
+        if self.adults + self.kids == 0:
+            raise HTTPException(400, "Add at least one person who's eating.")
+        if not self.days:
+            raise HTTPException(400, "Pick at least one day.")
+        return planner.Prefs(
+            adults=self.adults, kids=self.kids, meals=set(self.meals), days=self.days, appliances=set(self.appliances),
+            diets=set(self.diets) - {"none"}, vibes=set(self.vibes), allergens=set(self.allergens) - {"none"},
+            dislikes=[d for d in self.dislikes if d.strip()][:40], pantry=set(self.pantry),
+            budget=self.budget if budget is None else budget, prioritize_deals=self.prioritize_deals,
+            notes=self.notes.strip(), keep=self.keep, exclude=self.exclude,
+        )
+
+
+@app.post("/api/estimate")
+def estimate(req: PlanRequest) -> dict[str, Any]:
+    """Typical weekly Careem Quik cost for these answers, before the budget trims anything (read-only, no Claude)."""
+    result = planner.plan(facts(req.lat, req.lng, set(req.pantry)), req.prefs(budget=1e9))
+    return {"estimate": result["estimate"], "recipes": len(result["recipes"]), "portions": result["portions"]}
 
 
 @app.post("/api/plan")
 def make_plan(req: PlanRequest) -> dict[str, Any]:
-    prefs = planner.Prefs(
-        pantry=set(req.pantry), appliances=set(req.appliances), allergens=set(req.allergens), diet=req.diet,
-        people=req.people, days=req.days, meals=req.meals, budget=req.budget, goal=req.goal,
-        batch_cook=req.batch_cook, keep=req.keep, exclude=req.exclude, notes=req.notes.strip(),
-    )
+    prefs = req.prefs()
+    known = facts(req.lat, req.lng, set(req.pantry))
+    if not prefs.prioritize_deals:
+        # same rule as the budget step's feedback: under 95% of a typical week means "tight"
+        typical = planner.plan(known, req.prefs(budget=1e9))["estimate"]
+        prefs.prioritize_deals = req.budget < 0.95 * typical
     # Claude plans new weeks; swapping one meal (keep is set) stays rule-based so it's instant
     chooser = ai.choose if not req.keep else None
-    result = planner.plan(facts(req.lat, req.lng, set(req.pantry)), prefs, chooser=chooser)
+    result = planner.plan(known, prefs, chooser=chooser)
+    result["prioritized_deals"] = prefs.prioritize_deals
     if not result["recipes"]:
-        return {**result, "error": "No recipes fit these settings. Try allowing another appliance or fewer restrictions."}
+        return {**result, "error": "No recipes fit these answers. Try adding an appliance or removing a dislike or diet."}
     # match every needed ingredient to live Careem Quik inventory in one search call
     terms = list(dict.fromkeys(n["term"] for n in result["need"]))
     found = mcp.call("search_groceries_items", {"search_terms": terms, "latitude": req.lat, "longitude": req.lng, "limit": 5})
@@ -172,9 +197,10 @@ def make_plan(req: PlanRequest) -> dict[str, Any]:
         live = next((o for o in options if o["id"] == n["product"]["id"]), None)
         if live and live["available"]:
             n["match"] = {"status": "matched", "price": live["price"]}
-        elif any(o["available"] for o in options):
-            alt = next(o for o in options if o["available"])
-            n["match"] = {"status": "alternative", "suggested": alt}
+        elif safe := [o for o in options if o["available"] and not set(o["allergens"]) & prefs.allergens
+                      and not planner.disliked(prefs, o["name"])]:
+            # Careem Quik's suggestion must respect the same allergies and dislikes as the plan
+            n["match"] = {"status": "alternative", "suggested": safe[0]}
         else:
             n["match"] = {"status": "not_found"}
     result["searched_terms"] = len(terms)

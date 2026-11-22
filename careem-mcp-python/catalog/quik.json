@@ -3090,6 +3090,277 @@
    "stock": 25,
    "recommended": false,
    "master_product_id": "sku_orange_juice_1l"
+  },
+  {
+   "id": 4000181,
+   "name": "Strawberries 250g",
+   "unit": "250 g",
+   "pack": {
+    "amount": 250,
+    "unit": "g"
+   },
+   "price": 9.5,
+   "original_price": null,
+   "category": {
+    "id": 7301,
+    "name": "Fruits",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "strawberry",
+    "berries"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 32,
+    "protein_g": 0.7,
+    "carbs_g": 7.7,
+    "fat_g": 0.3
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_strawberries_250g"
+  },
+  {
+   "id": 4000182,
+   "name": "Plain Yogurt 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 6.75,
+   "original_price": null,
+   "category": {
+    "id": 7103,
+    "name": "Yogurt & Labneh",
+    "parent_id": 7100,
+    "parent_name": "Dairy & Eggs"
+   },
+   "keywords": [
+    "yogurt",
+    "plain yogurt",
+    "yoghurt"
+   ],
+   "allergens": [
+    "dairy"
+   ],
+   "diet": [
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 61,
+    "protein_g": 3.5,
+    "carbs_g": 4.7,
+    "fat_g": 3.3
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_plain_yogurt_500g"
+  },
+  {
+   "id": 4000183,
+   "name": "Firm Tofu 400g",
+   "unit": "400 g",
+   "pack": {
+    "amount": 400,
+    "unit": "g"
+   },
+   "price": 9.25,
+   "original_price": null,
+   "category": {
+    "id": 7609,
+    "name": "Legumes",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "tofu",
+    "bean curd"
+   ],
+   "allergens": [
+    "soy"
+   ],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 144,
+    "protein_g": 15.6,
+    "carbs_g": 3.5,
+    "fat_g": 8.7
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_firm_tofu_400g"
+  },
+  {
+   "id": 4000184,
+   "name": "Kale 200g",
+   "unit": "200 g",
+   "pack": {
+    "amount": 200,
+    "unit": "g"
+   },
+   "price": 7.75,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "kale",
+    "greens"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 49,
+    "protein_g": 4.3,
+    "carbs_g": 8.8,
+    "fat_g": 0.9
+   },
+   "available": true,
+   "stock": 15,
+   "recommended": false,
+   "master_product_id": "sku_kale_200g"
+  },
+  {
+   "id": 4000185,
+   "name": "Sweet Corn 340g",
+   "unit": "340 g",
+   "pack": {
+    "amount": 340,
+    "unit": "g"
+   },
+   "price": 4.5,
+   "original_price": null,
+   "category": {
+    "id": 7604,
+    "name": "Canned & Jarred",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "corn",
+    "sweet corn",
+    "sweetcorn"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 81,
+    "protein_g": 2.9,
+    "carbs_g": 16.0,
+    "fat_g": 1.2
+   },
+   "available": true,
+   "stock": 30,
+   "recommended": false,
+   "master_product_id": "sku_sweet_corn_340g"
+  },
+  {
+   "id": 4000186,
+   "name": "Green Olives 300g",
+   "unit": "300 g",
+   "pack": {
+    "amount": 300,
+    "unit": "g"
+   },
+   "price": 8.25,
+   "original_price": null,
+   "category": {
+    "id": 7604,
+    "name": "Canned & Jarred",
+    "parent_id": 7600,
+    "parent_name": "Pantry"
+   },
+   "keywords": [
+    "olive",
+    "green olives"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 145,
+    "protein_g": 1.0,
+    "carbs_g": 3.8,
+    "fat_g": 15.3
+   },
+   "available": true,
+   "stock": 25,
+   "recommended": false,
+   "master_product_id": "sku_green_olives_300g"
+  },
+  {
+   "id": 4000187,
+   "name": "Eggplant 500g",
+   "unit": "500 g",
+   "pack": {
+    "amount": 500,
+    "unit": "g"
+   },
+   "price": 5.75,
+   "original_price": null,
+   "category": {
+    "id": 7302,
+    "name": "Vegetables",
+    "parent_id": 7300,
+    "parent_name": "Fruits & Vegetables"
+   },
+   "keywords": [
+    "eggplant",
+    "aubergine"
+   ],
+   "allergens": [],
+   "diet": [
+    "vegan",
+    "vegetarian",
+    "gluten_free",
+    "halal"
+   ],
+   "nutrition_per_100": {
+    "kcal": 25,
+    "protein_g": 1.0,
+    "carbs_g": 6.0,
+    "fat_g": 0.2
+   },
+   "available": true,
+   "stock": 20,
+   "recommended": false,
+   "master_product_id": "sku_eggplant_500g"
   }
  ]
 }

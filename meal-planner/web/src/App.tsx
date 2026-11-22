@@ -1,25 +1,19 @@
 import { ChefHat, MapPin, Moon, ShoppingCart, Sun } from 'lucide-react'
 import { MotionConfig, motion, useReducedMotion } from 'motion/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { aed, api, type Address, type Bootstrap, type Cart, type CartLine, type Plan, type Prefs, type Product } from './api'
+import { aed, api, type Address, type Bootstrap, type Cart, type CartLine, type Plan, type Product, type Recipe } from './api'
 import { CartSheet, type Payment } from './CartSheet'
 import { FlyLayer, type Flyer } from './FlyLayer'
-import { PlanError, PlanView } from './screens/PlanView'
-import { Setup } from './screens/Setup'
 import { lineFor, type ShopLine } from './helpers'
+import { RecipeDrawer } from './RecipeDrawer'
+import { PlanError, PlanView } from './screens/PlanView'
 import { Shop } from './screens/Shop'
 import { Track, type Order } from './screens/Track'
 import { Banner } from './ui'
+import { DEFAULT_ANSWERS, planBody, type Answers } from './wizard/answers'
+import { Wizard } from './wizard/Wizard'
 
-type Step = 'setup' | 'plan' | 'shop' | 'track'
-const STEPS: { key: Step; label: string }[] = [
-  { key: 'setup', label: 'Your kitchen' }, { key: 'plan', label: 'Meal plan' },
-  { key: 'shop', label: 'Shopping list' }, { key: 'track', label: 'Delivery' },
-]
-const DEFAULT_PREFS: Prefs = {
-  pantry: [], appliances: ['stove', 'oven'], allergens: [], diet: 'any', people: 2, days: 5, meals: 'dinner',
-  budget: 250, goal: 'balanced', batch_cook: true, keep: [], exclude: [], notes: '',
-}
+type View = 'wizard' | 'plan' | 'track'
 
 export default function App() {
   const dev = useMemo(() => new URLSearchParams(location.search).has('dev'), [])
@@ -29,13 +23,16 @@ export default function App() {
   const [bootError, setBootError] = useState<string | null>(null)
   const [address, setAddress] = useState<Address | null>(null)
   const [products, setProducts] = useState<Map<number, Product>>(new Map())
-  const [step, setStep] = useState<Step>('setup')
-  const [reached, setReached] = useState<Step[]>(['setup'])
-  const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS)
+  const [view, setView] = useState<View>('wizard')
+  const [wizardStep, setWizardStep] = useState(0)
+  const [answers, setAnswers] = useState<Answers>(DEFAULT_ANSWERS)
+  const [tab, setTab] = useState<'plan' | 'shop'>('plan')
   const [plan, setPlan] = useState<Plan | null>(null)
   const [planBusy, setPlanBusy] = useState(false)
   const [planError, setPlanError] = useState<string | null>(null)
-  const [swapBusy, setSwapBusy] = useState<string | null>(null)
+  const [exclude, setExclude] = useState<string[]>([])
+  const [swapBusy, setSwapBusy] = useState(false)
+  const [openRecipe, setOpenRecipe] = useState<string | null>(null)
   const [lines, setLines] = useState<Record<number, ShopLine>>({})
   const [cart, setCart] = useState<Cart | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -47,7 +44,6 @@ export default function App() {
   const [flyers, setFlyers] = useState<Flyer[]>([])
   const [order, setOrder] = useState<Order | null>(null)
   const cartBtn = useRef<HTMLButtonElement>(null)
-  const main = useRef<HTMLElement>(null)
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -70,53 +66,46 @@ export default function App() {
   }, [remember])
 
   useEffect(() => { load() }, [load])
+  useEffect(() => { if (address) api.cart(address).then(setCart).catch(() => undefined) }, [address])
 
-  useEffect(() => {
-    if (address) api.cart(address).then(setCart).catch(() => undefined)
-  }, [address])
+  const closeRecipe = useCallback(() => setOpenRecipe(null), [])
+  const top = () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
 
-  const go = (s: Step) => {
-    setStep(s)
-    setReached((r) => (r.includes(s) ? r : [...r, s]))
-    requestAnimationFrame(() => { main.current?.focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }) })
-  }
-
-  const buildPlan = async (extra?: Partial<Prefs>) => {
-    if (!address) return
+  const buildPlan = async (extra: Record<string, unknown> = {}) => {
+    if (!address) return null
     setPlanError(null)
     try {
-      const p = await api.plan({ ...prefs, ...extra }, address)
-      setPlan(p)
-      setLines({})
-      if (p.error) setPlanError(p.error)
+      const p = await api.plan(planBody(answers, extra), address)
+      if (p.error) { setPlanError(p.error); return null }
       return p
     } catch (e) {
       setPlanError((e as Error).message)
+      return null
     }
   }
 
-  const submitSetup = async () => {
+  const finishWizard = async () => {
     setPlanBusy(true)
-    const p = await buildPlan({ keep: [], exclude: [] })
+    setExclude([])
+    const p = await buildPlan()
     setPlanBusy(false)
-    if (p && !p.error) go('plan')
-    else go('plan')
+    if (p) { setPlan(p); setLines({}); setTab('plan'); setView('plan'); top() }
   }
 
   const swap = async (id: string) => {
     if (!plan) return
-    setSwapBusy(id)
+    setSwapBusy(true)
     const keep = plan.recipes.map((r) => r.id).filter((r) => r !== id)
-    const exclude = [...new Set([...prefs.exclude, id])]
-    setPrefs({ ...prefs, exclude })
-    const before = plan
-    const next = await buildPlan({ keep, exclude })
+    const ex = [...new Set([...exclude, id])]
+    setExclude(ex)
+    const next = await buildPlan({ keep, exclude: ex })
+    setSwapBusy(false)
+    if (!next) return
     // a swap is planned by rules; keep Claude's summary and notes for the meals that stayed
-    if (next && !next.error && before.ai?.used) {
-      const why = new Map(before.recipes.map((r) => [r.id, r.why]))
-      setPlan({ ...next, ai: before.ai, recipes: next.recipes.map((r) => ({ ...r, why: r.why ?? why.get(r.id) ?? null })) })
-    }
-    setSwapBusy(null)
+    const why = new Map(plan.recipes.map((r) => [r.id, r.why]))
+    setPlan(plan.ai?.used ? { ...next, ai: plan.ai, recipes: next.recipes.map((r) => ({ ...r, why: r.why ?? why.get(r.id) ?? null })) } : next)
+    setLines({})
+    setOpenRecipe(null)
   }
 
   const shopLines = () => (plan?.need ?? []).filter((n) => !lineFor(n, lines).skip).map((n) => ({
@@ -187,7 +176,8 @@ export default function App() {
         address: `${address.title}, ${address.subTitle}` })
       setCart({ basket: null })
       setSheetOpen(false)
-      go('track')
+      setView('track')
+      top()
     } catch (e) {
       // A transport failure here might still have placed the order, so never retry automatically.
       setSheetError(`${(e as Error).message} Check your Careem orders before trying again.`)
@@ -196,12 +186,8 @@ export default function App() {
     }
   }
 
-  const restart = () => {
-    setPlan(null); setOrder(null); setPrefs({ ...prefs, keep: [], exclude: [] }); setReached(['setup']); go('setup')
-  }
-
   const count = cart?.basket?.count ?? 0
-  const pantryNames = products
+  const recipe: Recipe | null = (plan && openRecipe && plan.recipes.find((r) => r.id === openRecipe)) || null
 
   return (
     <MotionConfig reducedMotion="user">
@@ -215,7 +201,6 @@ export default function App() {
         {boot && address && (
           <label className="address">
             <MapPin size={16} aria-hidden="true" />
-            <span className="visually-hidden">Deliver to</span>
             <select aria-label="Deliver to" value={address.id} onChange={(e) => {
               const a = boot.addresses.find((x) => x.id === e.target.value)
               if (a) { setAddress(a); load(a) }
@@ -232,49 +217,35 @@ export default function App() {
           <button type="button" ref={cartBtn} className="cart-btn" onClick={() => { setSheetError(null); setSheetOpen(true) }}
             aria-label={`Open cart, ${count} ${count === 1 ? 'item' : 'items'}${cart?.total ? `, ${aed(cart.total)}` : ''}`}>
             <ShoppingCart size={19} aria-hidden="true" />
-            <motion.span key={count} className="cart-count num" initial={reduce ? false : { scale: 1.6 }} animate={{ scale: 1 }}
+            <motion.span key={count} className="cart-count" initial={reduce ? false : { scale: 1.6 }} animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 500, damping: 18 }}>{count}</motion.span>
           </button>
         </div>
       </header>
 
-      <nav className="steps-nav" aria-label="Progress">
-        <ol>
-          {STEPS.map((s, i) => {
-            const can = reached.includes(s.key) && !(s.key === 'track' && !order) && step !== 'track'
-            return (
-              <li key={s.key}>
-                <button type="button" className={step === s.key ? 'stepper on' : 'stepper'} disabled={!can || step === s.key}
-                  aria-current={step === s.key ? 'step' : undefined} onClick={() => go(s.key)}>
-                  <span className="stepper-n num" aria-hidden="true">{i + 1}</span> {s.label}
-                </button>
-              </li>
-            )
-          })}
-        </ol>
-      </nav>
-
-      <main id="main" ref={main} tabIndex={-1} className="main">
+      <main id="main" tabIndex={-1} className={view === 'wizard' ? 'main main-wizard' : 'main'}>
         {bootError && <Banner tone="error" action={<button type="button" className="btn btn-quiet" onClick={() => load(address ?? undefined)}>Try again</button>}>{bootError}</Banner>}
         {boot && !boot.serviceable && (
           <Banner tone="error">Careem Quik doesn't deliver to {address?.title ?? 'this address'}. You can still plan; pick another address to order.</Banner>
         )}
         {!boot && !bootError && <div className="loading" role="status">Loading your Careem profile…</div>}
 
-        {boot && address && step === 'setup' && (
-          <Setup boot={boot} address={address} prefs={prefs} setPrefs={setPrefs} pantryNames={pantryNames}
-            rememberProduct={(p) => remember([p])} onSubmit={submitSetup} busy={planBusy} aiAvailable={boot.ai_available} />
+        {boot && address && view === 'wizard' && (
+          <Wizard answers={answers} setAnswers={setAnswers} step={wizardStep} setStep={setWizardStep} address={address}
+            aiAvailable={boot.ai_available} products={products} remember={(p) => remember([p])} busy={planBusy}
+            error={planError} onDone={finishWizard} />
         )}
-        {step === 'plan' && planError && <PlanError message={planError} onBack={() => go('setup')} />}
-        {step === 'plan' && plan && !plan.error && boot && (
-          <PlanView plan={plan} deals={boot.deals} busySwap={swapBusy} onSwap={swap} onBack={() => go('setup')} onNext={() => go('shop')} />
+        {view === 'plan' && planError && <PlanError message={planError} onBack={() => setView('wizard')} />}
+        {view === 'plan' && plan && boot && (
+          <PlanView plan={plan} deals={boot.deals} tab={tab} setTab={(t) => { setTab(t); top() }} onOpen={(r) => setOpenRecipe(r.id)}
+            onEdit={() => { setWizardStep(0); setView('wizard') }}
+            shop={<Shop plan={plan} lines={lines} setLine={(id, l) => setLines({ ...lines, [id]: l })} serviceable={boot.serviceable}
+              busy={cartBusy} onBack={() => { setTab('plan'); top() }} onAddToCart={startAddToCart} />} />
         )}
-        {step === 'shop' && plan && boot && (
-          <Shop plan={plan} lines={lines} setLine={(id, l) => setLines({ ...lines, [id]: l })} serviceable={boot.serviceable}
-            busy={cartBusy} onBack={() => go('plan')} onAddToCart={startAddToCart} />
-        )}
-        {step === 'track' && order && <Track order={order} onDone={restart} />}
+        {view === 'track' && order && <Track order={order} onDone={() => { setOrder(null); setPlan(null); setWizardStep(0); setView('wizard') }} />}
       </main>
+
+      {plan && <RecipeDrawer recipe={recipe} plan={plan} swapBusy={swapBusy} onClose={closeRecipe} onSwap={swap} />}
 
       {existing?.basket && (
         <div className="overlay center" role="presentation">

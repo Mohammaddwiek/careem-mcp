@@ -22,7 +22,7 @@ def catalog():
 
 
 def test_catalog_size_and_fixture_ids(catalog):
-    assert 60 <= len(catalog) <= 80
+    assert 60 <= len(catalog) <= 100
     milk = catalog[4000101]
     assert milk.name == "Fresh Farm Full Cream Milk 1L" and milk.price == 6.75
     assert catalog[4000106].available is False

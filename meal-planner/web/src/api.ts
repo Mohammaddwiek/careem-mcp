@@ -35,32 +35,12 @@ export interface Bootstrap {
   ai_available: boolean
 }
 
-export type Goal = 'balanced' | 'save' | 'protein' | 'quick'
-export type Diet = 'any' | 'vegetarian' | 'vegan' | 'gluten_free'
-export type Meals = 'dinner' | 'lunch_dinner' | 'all'
-
-export interface Prefs {
-  pantry: number[]
-  appliances: string[]
-  allergens: string[]
-  diet: Diet
-  people: number
-  days: number
-  meals: Meals
-  budget: number
-  goal: Goal
-  batch_cook: boolean
-  keep: string[]
-  exclude: string[]
-  notes: string
-}
-
 export interface Swap { ingredient: string; from: string; to: string; reason: string }
 
 export interface Recipe {
   id: string
   name: string
-  slot: 'breakfast' | 'main'
+  slot: 'breakfast' | 'main' | 'snack'
   minutes: number
   cuisine: string
   blurb: string
@@ -70,6 +50,8 @@ export interface Recipe {
   deals: string[]
   swaps: Swap[]
   ingredients: { name: string; product_id: number; product: string; amount: number; unit: string }[]
+  steps: { text: string; minutes: number | null }[]
+  tags: string[]
   why?: string | null
 }
 
@@ -89,7 +71,10 @@ export interface NeedRow extends HaveRow {
 }
 
 export interface Plan {
-  schedule: { day: number; slot: string; recipe: string }[]
+  portions: number
+  days: { day: number; name: string }[]
+  meals: string[]
+  schedule: { day: number; day_name: string; meal: string; recipe: string; leftovers: boolean }[]
   recipes: Recipe[]
   have: HaveRow[]
   need: NeedRow[]
@@ -99,6 +84,8 @@ export interface Plan {
   over_budget: boolean
   excluded: { recipe: string; reason: string }[]
   ai?: { used: boolean; summary: string | null }
+  prioritized_deals?: boolean
+  missing?: string[]
   error?: string
 }
 
@@ -162,7 +149,8 @@ const qs = (a: Address) => `lat=${a.latitude}&lng=${a.longitude}`
 export const api = {
   bootstrap: (a?: Address) => call<Bootstrap>(`/api/bootstrap${a ? `?${qs(a)}` : ''}`),
   search: (q: string, a: Address) => call<{ items: Product[]; error?: string | null }>(`/api/search?q=${encodeURIComponent(q)}&${qs(a)}`),
-  plan: (p: Prefs, a: Address) => post<Plan>('/api/plan', { ...p, ...at(a) }),
+  plan: (body: Record<string, unknown>, a: Address) => post<Plan>('/api/plan', { ...body, ...at(a) }),
+  estimate: (body: Record<string, unknown>, a: Address) => post<{ estimate: number }>('/api/estimate', { ...body, ...at(a) }),
   cart: (a: Address) => call<Cart>(`/api/cart?${qs(a)}`),
   fillCart: (a: Address, mode: 'replace' | 'keep', lines: { catalog_item_id: string; keyword: string; quantity: number }[]) =>
     post<Cart>('/api/cart', { ...at(a), mode, lines }),

@@ -22,13 +22,15 @@ MODEL = os.environ.get("MEAL_PLANNER_MODEL", "claude-opus-5-5")
 
 SYSTEM = """You plan home cooking for a meal-prep app built on Careem Quik grocery delivery in Dubai.
 
-You get the user's household, goal, budget, pantry and any notes in their own words, plus a list of
-candidate recipes. Every candidate already fits their allergies, diet and kitchen appliances, so
-you never need to second-guess safety; pick only from the candidates, by id.
+You get the user's household, the meals and days they cook, how they eat, the vibe they want,
+budget, pantry, dislikes and any notes in their own words, plus a list of candidate recipes. Every
+candidate already fits their allergies, strict diet, dislikes and kitchen appliances, so you never
+need to second-guess safety; pick only from the candidates, by id.
 
-Choose the requested number of breakfasts and mains. Good plans:
-- follow the user's notes and goal first (saving money: low cost per serving and items on deal;
-  protein: high protein per serving; speed: short cooking time; balance: a mix);
+Choose the requested number of breakfasts, mains and snacks. Good plans:
+- follow the user's notes, eating style and vibe first (high-protein: protein per serving; GLP-1
+  friendly: protein and fiber, moderate calories; quick: short cooking time; batch cook: dishes that
+  keep well as leftovers; tight budget: low cost per serving and items on deal);
 - reuse ingredients across recipes so less goes to waste, and use what is already in the pantry;
 - lean on today's Careem Quik deals where they fit;
 - stay inside the budget (cost per serving times servings is a fair estimate) and vary cuisines.
@@ -47,6 +49,7 @@ class AIPlan(BaseModel):
     summary: str = Field(description="Two sentences, addressed to the user.")
     breakfasts: list[Pick]
     mains: list[Pick]
+    snacks: list[Pick]
 
 
 def available() -> bool:
@@ -81,13 +84,15 @@ def choose(candidates: list[Resolved], prefs: Prefs, wanted: dict[str, int], pan
     """Ask Claude for the plan. Returns {"summary", "picks": {slot: [ids]}, "reasons": {id: text}} or None."""
     if not available() or not candidates:
         return None
+    from .planner import DAY_NAMES, MEALS
     request = {
-        "household": {"people": prefs.people, "days": prefs.days, "meals_each_day": prefs.meals,
-                      "cook_once_eat_twice": prefs.batch_cook},
-        "goal": prefs.goal, "weekly_budget_aed": prefs.budget, "pantry": pantry_names,
-        "their_notes": prefs.notes or None,
-        "choose": {"breakfasts": wanted.get("breakfast", 0), "mains": wanted.get("main", 0)},
-        "servings_per_recipe": prefs.people * (2 if prefs.batch_cook else 1),
+        "household": {"adults": prefs.adults, "kids": prefs.kids, "portions_per_meal": prefs.portions},
+        "meals": [m for m in MEALS if m in prefs.meals], "days": [DAY_NAMES[d] for d in sorted(prefs.days)],
+        "eating_style": sorted(prefs.diets) or ["no restrictions"], "vibe": sorted(prefs.vibes),
+        "dislikes": prefs.dislikes, "weekly_budget_aed": prefs.budget, "tight_budget": prefs.prioritize_deals,
+        "pantry": pantry_names, "their_notes": prefs.notes or None,
+        "choose": {"breakfasts": wanted.get("breakfast", 0), "mains": wanted.get("main", 0), "snacks": wanted.get("snack", 0)},
+        "portions_per_recipe": prefs.portions * (2 if prefs.batch_cook else 1),
         "candidates": [_candidate(r) for r in candidates],
     }
     try:
@@ -119,7 +124,7 @@ def validate(plan: AIPlan, candidates: list[Resolved], wanted: dict[str, int]) -
     by_id = {r.recipe.id: r for r in candidates}
     picks: dict[str, list[str]] = {}
     reasons: dict[str, str] = {}
-    for slot, chosen in (("breakfast", plan.breakfasts), ("main", plan.mains)):
+    for slot, chosen in (("breakfast", plan.breakfasts), ("main", plan.mains), ("snack", plan.snacks)):
         ids: list[str] = []
         for p in chosen:
             r = by_id.get(p.recipe_id)
