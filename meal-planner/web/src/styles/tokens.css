@@ -1,0 +1,85 @@
+/* Design tokens: careem_mcp_design_system_token_specification.md §4, plus focus, state and
+   motion tokens the components need. Dark is the default; [data-theme="light"] switches. */
+:root {
+  --bg-base: #070B09;
+  --bg-surface: #0F1613;
+  --bg-elevated: #16211C;
+  --border-subtle: #22322A;
+  --border-strong: #3A5245;
+  --border-glow: rgba(0, 235, 121, 0.22);
+
+  --text-primary: #F3F7F5;
+  --text-secondary: #9FB3A8;
+
+  --brand-primary: #00EB79;
+  --brand-hover: #2BFF96;
+  --brand-on-primary: #041E10;
+  --brand-text: #00EB79;        /* green used as text on surfaces */
+  --brand-tint: rgba(0, 235, 121, 0.12);
+
+  --deal-bg: #2E2105;
+  --deal-text: #FFC233;
+  --pantry-have: #00EB79;
+  --allergen-bg: #331014;
+  --allergen-text: #FF6B72;
+  --ai-accent: #38BDF8;
+  --ai-tint: rgba(56, 189, 248, 0.12);
+
+  --focus-ring: #7DF9BE;
+  --overlay: rgba(2, 4, 3, 0.72);
+  --glass-bg: rgba(15, 22, 19, 0.85);
+  --glass-border: rgba(0, 235, 121, 0.18);
+  --shadow-glass: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 12px 28px rgba(0, 0, 0, 0.35);
+  --glow: 0 0 25px rgba(0, 235, 121, 0.15);
+
+  --font-display: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --radius-card: 20px;
+  --radius-input: 14px;
+  --radius-pill: 9999px;
+  --radius-sheet: 28px;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg-base: #F4F7F5;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #E9F2ED;
+  --border-subtle: #D1DFD7;
+  --border-strong: #9DB5A8;
+  --border-glow: rgba(0, 135, 68, 0.18);
+
+  --text-primary: #0D1B14;
+  --text-secondary: #465B50;
+
+  --brand-primary: #008744;
+  --brand-hover: #007038;
+  --brand-on-primary: #FFFFFF;
+  --brand-text: #007038;
+  --brand-tint: rgba(0, 135, 68, 0.1);
+
+  --deal-bg: #FFF4D6;
+  --deal-text: #8A5300;
+  --pantry-have: #008744;
+  --allergen-bg: #FDECEC;
+  --allergen-text: #B42318;
+  --ai-accent: #026AA2;
+  --ai-tint: rgba(2, 106, 162, 0.08);
+
+  --focus-ring: #026AA2;
+  --overlay: rgba(13, 27, 20, 0.45);
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(0, 135, 68, 0.2);
+  --shadow-glass: 0 20px 40px rgba(13, 27, 20, 0.14);
+  --shadow-card: 0 1px 2px rgba(13, 27, 20, 0.06), 0 8px 24px rgba(13, 27, 20, 0.06);
+  --glow: 0 0 0 transparent;
+  color-scheme: light;
+}

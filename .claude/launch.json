@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "meal-planner-api",
+      "runtimeExecutable": "meal-planner/backend/.venv/Scripts/python.exe",
+      "runtimeArgs": ["-m", "uvicorn", "app.main:app", "--app-dir", "meal-planner/backend", "--host", "127.0.0.1", "--port", "8001"],
+      "port": 8001
+    },
+    {
+      "name": "meal-planner-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "meal-planner/web", "run", "dev"],
+      "port": 5173
+    }
+  ]
+}
